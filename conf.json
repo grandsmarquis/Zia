@@ -1,0 +1,73 @@
+{
+  "conf": {
+    "http": {
+      "rules": {
+        "$and": {
+          "port": [443],
+          "ssl": true
+        }
+      },
+    },
+    "gzip": {
+      "name": "gzip",
+      "rules": {
+        "Accept-Encoding": ["gzip"]
+      }
+    },
+  }
+  "servers": {
+    "google.fr": {
+      "directory": "/var/www",
+      "conf": {
+        "http": {
+          "auth": {
+            "/var/www/admin": {
+              "admin": "admin"
+            }
+          }
+        }
+      },
+      "modules": [ // ALL
+      {
+        "name": "ssl",
+        "rules": {
+          "port": [443]
+        }
+      }, { // FIRST
+        "http": {
+          "modules": [ // ALL
+          "gzip",
+          {
+            "name": "log",
+            "file": "access.log"
+          }, { // FIRST
+            "static": {
+              "file": "index.html",
+              "rules": ["url": ["/", "/about", "/toto"]]
+            },
+            "python": {
+              "rules": ["url": ["*.py"]]
+            },
+            "file": {
+              "name": "file"
+            },
+            "directory": {}
+          }]
+        },
+        {
+          "name": "ftp",
+          "rules": {
+            "port": [21]
+          },
+          "auth": {
+            "/var/www/admin": {
+              "admin": "admin"
+            }
+          }
+        }
+      }]
+    },
+
+    "google.com": {}
+  }
+}
