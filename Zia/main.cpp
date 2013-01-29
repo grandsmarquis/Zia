@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "net/TCPSocket.h"
-#include "net/exception.h"
+#include "net/Exception.h"
 
 int main(int argc, const char * argv[])
 {
@@ -18,7 +18,7 @@ int main(int argc, const char * argv[])
     sock.Listen();
     // insert code here...
     sock.Accept();
-    } catch (Net::exception e) {
+    } catch (Net::Exception e) {
         std::cerr << e.what() << std::endl;
     }
     std::cout << "Hello, World!\n";

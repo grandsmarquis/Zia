@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 William Riancho. All rights reserved.
 //
 
-#include "exception.h"
+#include "Exception.h"
 
 namespace Net {
 
-  exception::exception(std::string const & what) : _what(what) {}
-  exception::~exception() {}
-  const char * exception::what() {
+  Exception::Exception(std::string const & what) : _what(what) {}
+  Exception::~Exception() {}
+  const char * Exception::what() {
     return _what.c_str();
   }
 }

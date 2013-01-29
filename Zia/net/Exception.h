@@ -13,13 +13,13 @@
 #include <string>
 
 namespace Net {
-    class exception /* : public std::exception */{
+    class Exception /* : public std::exception */{
     private:
         std::string _what;
         
     public:
-        exception(std::string const & what);
-        virtual ~exception();
+        Exception(std::string const & what);
+        virtual ~Exception();
         virtual const char * what();
     };
 }

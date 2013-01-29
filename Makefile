@@ -5,15 +5,14 @@ RM = rm -rf
 MKDIR = mkdir -p
 
 # Files
-BIN = event
+BIN = zia
 
 CXXFILES = Zia/main.cpp \
 					 Zia/event/Callback.cpp \
 					 Zia/thread/Thread.cpp \
-					 Zia/net/exception.cpp \
+					 Zia/net/Exception.cpp \
 					 Zia/net/Socket.cpp \
-					 Zia/net/TCPSocket.cpp \
-					 Zia/thread/Thread.cpp
+					 Zia/net/TCPSocket.cpp
 
 OBJS = $(CXXFILES:.cpp=.o)
 
