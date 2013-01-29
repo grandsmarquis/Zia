@@ -1,11 +1,9 @@
-# CXX = gcc
-
 # Tools
 RM = rm -rf
 MKDIR = mkdir -p
 
 # Files
-BIN = zia
+BIN = server
 
 CXXFILES = Zia/main.cpp \
 					 Zia/event/Callback.cpp \
