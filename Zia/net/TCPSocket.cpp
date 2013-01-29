@@ -18,7 +18,7 @@
 #include <errno.h>
 #include <strings.h>
 
-#include "Exception.h"
+#include "exception.h"
 #include "TCPSocket.h"
 
 void print_ip_addr(const struct sockaddr_in * sinptr) {
@@ -53,13 +53,13 @@ namespace Net {
         */
         
         if (-1 == bind(_fd, (struct sockaddr *) &sock_addr, sizeof(sock_addr))) {
-            throw Net::Exception(std::string("bind: ").append(strerror(errno)));
+            throw Net::exception(std::string("bind: ").append(strerror(errno)));
         }
     }
     
     void TCPSocket::Listen(int backlog) {
         if (-1 == listen(_fd, backlog)) {
-            throw Net::Exception(std::string("listen: ").append(strerror(errno)));
+            throw Net::exception(std::string("listen: ").append(strerror(errno)));
         }
     }
     
@@ -78,11 +78,11 @@ namespace Net {
 
         s = select(_fd + 1, &in_set, NULL, NULL, NULL);
         if (-1 == s) {
-            throw Net::Exception(std::string("select: ").append(strerror(errno)));
+            throw Net::exception(std::string("select: ").append(strerror(errno)));
         }
         if (s == 1) {
             if (-1 == accept(_fd, (struct sockaddr *) &accept_sockaddr, &address_len)) {
-                throw Net::Exception(std::string("accept: ").append(strerror(errno)));
+                throw Net::exception(std::string("accept: ").append(strerror(errno)));
             }
             if (AF_INET == accept_sockaddr.sa_family) {
                 print_ip_addr((struct sockaddr_in *) &accept_sockaddr);

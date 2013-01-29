@@ -13,16 +13,14 @@
 #include <string>
 
 namespace Net {
-    class Exception : public std::exception {
+    class exception /* : public std::exception */{
     private:
         std::string _what;
         
     public:
-        Exception(std::string const & what) : _what(what) {}
-        virtual ~Exception() {}
-        virtual const char * what() {
-            return _what.c_str();
-        }
+        exception(std::string const & what);
+        virtual ~exception();
+        virtual const char * what();
     };
 }
 

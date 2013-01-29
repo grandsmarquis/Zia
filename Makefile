@@ -10,8 +10,10 @@ BIN = event
 CXXFILES = Zia/main.cpp \
 					 Zia/event/Callback.cpp \
 					 Zia/thread/Thread.cpp \
+					 Zia/net/exception.cpp \
 					 Zia/net/Socket.cpp \
-					 Zia/net/TCPSocket.cpp
+					 Zia/net/TCPSocket.cpp \
+					 Zia/thread/Thread.cpp
 
 OBJS = $(CXXFILES:.cpp=.o)
 

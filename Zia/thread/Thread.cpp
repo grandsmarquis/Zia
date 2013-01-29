@@ -16,12 +16,11 @@ namespace Thread {
         }
     }
     
+    Thread::~Thread() {}
+
     void Thread::join() {
         if (0 != pthread_join(_thread, NULL)) {
             throw;
         }
-    }
-
-    Thread::~Thread() {
     }
 }
