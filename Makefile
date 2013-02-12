@@ -13,7 +13,13 @@ CXXFILES = Zia/main.cpp \
 					 Zia/thread/Cond.cpp \
 					 Zia/thread/Exception.cpp \
 					 Zia/thread/Mutex.cpp \
-					 Zia/thread/Thread.cpp
+					 Zia/thread/Thread.cpp \
+					 Zia/my_module/MyModule.cpp \
+					 Zia/my_module/MyModuleContextData.cpp \
+					 Zia/zia/AModule.cpp \
+					 Zia/zia/CrossModulePackage.cpp \
+					 Zia/zia/Listener.cpp \
+					 Zia/zia/Worker.cpp
 
 OBJS = $(CXXFILES:.cpp=.o)
 
