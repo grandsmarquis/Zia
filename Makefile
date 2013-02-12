@@ -7,10 +7,13 @@ BIN = server
 
 CXXFILES = Zia/main.cpp \
 					 Zia/event/Callback.cpp \
-					 Zia/thread/Thread.cpp \
 					 Zia/net/Exception.cpp \
 					 Zia/net/Socket.cpp \
-					 Zia/net/TCPSocket.cpp
+					 Zia/net/TCPSocket.cpp \
+					 Zia/thread/Cond.cpp \
+					 Zia/thread/Exception.cpp \
+					 Zia/thread/Mutex.cpp \
+					 Zia/thread/Thread.cpp
 
 OBJS = $(CXXFILES:.cpp=.o)
 

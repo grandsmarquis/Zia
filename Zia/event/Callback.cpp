@@ -32,11 +32,10 @@ namespace Event {
     Callback::~Callback() {
         
     }
-    
+    /*
     void Callback::operator()() {
         Net::TCPSocket sock(8888);
-        
-        /*
+     
          listen(sock, 128);
          
          FD_ZERO(&in_set);
@@ -46,8 +45,9 @@ namespace Event {
          in_sock = accept(sock, &accept_sockaddr, &address_len);
          }
          write(in_sock, "Hello world", strlen("hello world"));
-         */
+     
     }
+     */
     
     void *Callback::simpleSymbole(void *self) {
         Event::Callback *cb;

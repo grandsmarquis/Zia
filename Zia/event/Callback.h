@@ -14,8 +14,8 @@ namespace Event {
     class Callback {
     public:
         Callback();
-        ~Callback();
-        void operator()();
+        virtual ~Callback();
+        virtual void operator()() = 0;
         static void *simpleSymbole(void *self);
     };
     

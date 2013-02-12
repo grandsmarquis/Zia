@@ -9,7 +9,9 @@
 #ifndef __Zia__Net__Socket__
 #define __Zia__Net__Socket__
 
+#include "unistd.h"
 #include <iostream>
+#include <string>
 
 #include <sys/socket.h>
 
@@ -19,8 +21,14 @@ namespace Net {
         int _fd;
         
     public:
+        Socket(int scoket);
         Socket(int domain, int type, int protocol);
         ~Socket();
+        
+        void Listen(int backlog = 128);
+        Socket * Accept();
+        size_t Write(const void * data, size_t len);
+        size_t Write(const std::string & str);
     };
 }
 

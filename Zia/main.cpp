@@ -7,20 +7,16 @@
 //
 
 #include <iostream>
-#include "net/TCPSocket.h"
-#include "net/Exception.h"
+#include "zia/Listener.h"
+#include "thread/Exception.h"
 
 int main(int argc, const char * argv[])
 {
     try {
-    Net::TCPSocket sock(8889);
-    
-    sock.Listen();
-    // insert code here...
-    sock.Accept();
-    } catch (Net::Exception e) {
-        std::cerr << e.what() << std::endl;
+    Listener a(8888);
+    a.join();
+    } catch (Thread::Exception e) {
+        std::cout << e.what() << std::endl;
     }
-    std::cout << "Hello, World!\n";
     return 0;
 }

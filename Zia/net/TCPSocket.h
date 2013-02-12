@@ -16,8 +16,6 @@ namespace Net {
         
     public:
         TCPSocket(int port);
-        void Listen(int backlog = 128);
-        void Accept();
     };
 }
 
