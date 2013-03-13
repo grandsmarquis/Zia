@@ -219,3 +219,131 @@ de context des module en passant de module en module des objets
 `Transaction` contiendront sur les informations sur l'hote ainsi que
 les configurations des differents modules intervenant dans la
 transaction et les context cree par les differents modules precedents.
+
+##
+
+### EventLoop | ModuleManager
+
+```cpp
+
+class EventLoop {
+  private:
+    Process _process;
+
+  protected:
+    std::map<IEvented *>;
+  
+  public:
+    unsigned int getLoad();
+};
+
+class ModuleManager : public EventLoop {
+
+};
+
+class Callback {
+  public:
+    operator()() {}
+};
+
+```
+
+## IEvented | Module
+
+```cpp
+
+class IEvented {
+  private:
+    std::map<std::string, Callback> _events;
+
+  public:
+    void on(std::string & const event, Callback & cb);
+    void one(std::string & const event, Callback & cb);
+
+    void trigger(std::string & const event);
+};
+
+class Module : public IEvented {
+  private:
+    unsigned int _moduleId;
+    DynamicLibrary _lib;
+    Process _process;
+
+    std::map<std::string, Callback> _listeners;
+
+  public:
+    void newContextOperation(ModuleContext & context) throw
+ModuleContextException;
+    void clearModuleContext() throw ModuleContextException;
+    boolean is(std::string & const a, std::string & const b) throw
+ModuleContextException; // if condition
+
+    /*
+     * onData();
+     * onLoaded();
+     * onHttpReady()
+     * ...
+     */
+};
+
+```
+
+## ModuleContext
+
+```cpp
+
+class ModuleContext {
+
+  private:
+    unsigned int _ownerModuleId;
+    std::map<std::string, std::string> _data;
+
+  public:
+    std::string & const get(std::string & const key) const;
+    void set(std::string & const key, value) throw ContextException;
+
+};
+
+```
+
+### CrossModulePackage | Transaction
+
+```cpp
+
+class CrossModulePackage {
+
+};
+
+class Transatcion : public CrossModulePacakage { 
+
+  protected:
+    Socket _sock;
+    Client _client;
+
+  public:
+
+    std::string & const get(std::string key) const;
+    std::map<std::string> & const get(std::string key) const;
+    // v = this->get("http/headers")
+    // v = this->get("http/headers/content-encoding")
+
+    void set(std::string key, std::string value);
+    // v = this->set("http/headers/content-encoding", "gzip")
+    // v = this->set("http/headers/content-type", "application/json")
+};
+```
+
+### EventLoopManager
+
+```cpp
+class EventLoopManager {
+  private:
+    std::list<EventLoop> _loops;
+    void run(EventLoop loop, Transaction transaction);
+
+  public:
+    EventLoopManager(unsigned int n_loop);
+    Transaction & createTransaction();    
+    void dispatch(Transaction transaction);
+};
+```
