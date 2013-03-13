@@ -1,6 +1,6 @@
 Le serveur Zia s’organise autour d’un Pipe a travers lequel, la transaction recontrera differents module qui effectuerons les actions necessaire dans le but de fournir la reponse adequat. Par example, prenons une requete Http classique visant a executer un script PHP. L’url en question est ‘http://127.0.0.1/index.php’. La configuration du serveur se presente comme cela:
 
-```
+```javascript
 {
   "conf": {
     "http": {
@@ -11,7 +11,7 @@ Le serveur Zia s’organise autour d’un Pipe a travers lequel, la transaction 
     "gzip": {
       "name": "gzip",
       "rules": {
-        "http: {
+        "http": {
           "Accept-Encoding": ["gzip"]
         }
       }
@@ -30,40 +30,45 @@ Le serveur Zia s’organise autour d’un Pipe a travers lequel, la transaction 
           }
         }
       },
-      "modules": [{ // FIRST
+      "modules": [ // ALL
+        { // FIRST
         "http": {
           "modules": [ // ALL
-          "gzip",
-          {
-            "name": "log",
-            "file": "access.log"
-          }, { // FIRST
-            "static": {
-              "file": "index.html",
-              "rules": {
-                "http": {
-                  "url": ["/", "/about", "/toto"]]
+            "gzip", // Module
+            {
+              // Modiule
+              "name": "log",
+              "file": "access.log"
+            },
+            { // FIRST
+              "static": { // Module
+                "file": "index.html",
+                "rules": {
+                  "http": {
+                    "url": ["/", "/about", "/toto"]
+                  }
+                },
+              },
+              "php": { // Module
+                "rules": {
+                  "http": {
+                    "url": ["*.php"]
+                  }
                 }
-            },
-            "php": {
-              "rules": {
-                "http": {
-                  "url": ["*.php"]]
-                }
-              }
-            },
-            "python": {
-              "rules": ["url": ["*.py"]]
-            },
-            "file": {},
-            "directory": {}
-          }]
+              },
+              "python": { // Module
+                "rules": ["url": ["*.py"]]
+              },
+              "file": {}, // Module
+              "directory": {} // Module
+            }
+          ]
         },
-        "ftp": {
+        "ftp": { // Module
           "rules": {
             "port": [21]
           },
-          "auth": {
+          "auth": { // Module
             "/var/www/admin": {
               "admin": "admin"
             }
@@ -71,7 +76,6 @@ Le serveur Zia s’organise autour d’un Pipe a travers lequel, la transaction 
         }
       }]
     },
-
     "google.com": {}
   }
 }
@@ -113,7 +117,7 @@ La semantique attendu est la suivante. Conciderant le module nome
 par un objet de telle sorte que celui-ci contienne un attribut `name`
 correspondant au nom du module:
 
-```
+```javascript
 [
   {
     "name": "file"
@@ -127,9 +131,9 @@ de module.
 Dans un objet, le module doit etre renseigner par un element le la liste
 object  nomme de la meme maniere que le module:
 
-```
+```javascript
 {
-  "file: {
+  "file": {
 
   }
 }
