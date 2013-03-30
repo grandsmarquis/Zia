@@ -26,6 +26,7 @@ std::string const &RequestHeader::getCommand() const
 
 std::string const &RequestHeader::getValueForKey(std::string const & key) const
 {
+  return (_options.find(key)->second);
 }
 
 std::string const &RequestHeader::getVersion() const
@@ -35,6 +36,7 @@ std::string const &RequestHeader::getVersion() const
 
 bool RequestHeader::hasKey(std::string const & value)
 {
+  return (_options.find(value) != _options.end());
 }
 
 void RequestHeader::setCommand(std::string const & command)

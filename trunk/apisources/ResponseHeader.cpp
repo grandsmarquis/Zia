@@ -26,8 +26,7 @@ std::string const &             ResponseHeader::getStatusMessage() const
 
 std::string const &             ResponseHeader::getValueForKey(std::string const & key) const
 {
-  return ((_options.find(key))->second());
-
+  return (_options.find(key)->second);
 }
 
 std::string const &             ResponseHeader::getVersion() const
