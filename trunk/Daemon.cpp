@@ -40,26 +40,26 @@ void Daemon::ReceiveAll()
   rec =_socket->Recieve(buffer, 254);
   if (rec > 0)
     {
-      buffer[rec] = 0;
-      this->_b.pushData(buffer);
+      this->_b.pushData(buffer, rec);
    }
   else
     {
       this->_running = false;
-      while (!_b.isEmpty())
+      if (!_b.isEmpty())
 	{
-	  std::cout << *(_b.popLine()) << std::endl;
+	  std::cout << _b.getData() << std::endl;
 	}
     }
 }
 
 void Daemon::work()
 {
+  bool status = false;
+  
   std::cout << "CONNECTION_INIT" << std::endl;
   while (this->_running)
     {
       this->ReceiveAll();
-
       /*
 	std::cout << "PREPROCESS_REQUEST" << std::endl;
 	std::cout << "PROCESS_REQUEST" << std::endl;
@@ -67,6 +67,9 @@ void Daemon::work()
 	std::cout << "PROCESS_FINISHED_RESPONSE" << std::endl;
 	std::cout << "PRESENDING_PROCESSING" << std::endl;
       */
+      if (status)
+	{
+	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
 }

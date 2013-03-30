@@ -2,28 +2,21 @@
 #ifndef __BUCKET_HH__
 #define __BUCKET_HH__
 
-#include <string>
-#include <iostream>
-#include <sstream>
-
 #include <stdio.h>
 #include <cstring>
-
-#include <queue>
 
 class Bucket
 {
 
 public:
   Bucket(void);
-  void pushData(char *data);
-  std::string *popLine(void);
-  std::string *peekLine(void);
-  bool isEmpty() const;
-
+  void pushData(char *data, int size);
+  int getSize(void) const;
+  bool isEmpty(void) const;
+  char *getData(void);
 private:
-  std::string _tmp;
-  std::queue<std::string *> _q;
+  int _size;
+  char *_data;
   bool _b;
 };
 
