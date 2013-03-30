@@ -30,6 +30,7 @@ bool DaemonManager::isListeningOn(int port)
 
 int DaemonManager::getNbDaemon() const
 {
+  return (_dList.size());
 }
 
 void DaemonManager::update()

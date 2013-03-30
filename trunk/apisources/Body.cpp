@@ -2,6 +2,7 @@
 #include "Body.h"
 
 Body::Body(char *body, int lenght)
+  :_body(body), _length(lenght)
 {
 }
 
@@ -9,17 +10,17 @@ Body::~Body()
 {
 }
 
-char *getBody()
+char *Body::getBody()
 {
   return (_body);
 }
 
-int getBodyLength() const
+int Body::getBodyLength() const
 {
   return (_length);
 }
 
-void setBody(char *body, int lenght)
+void Body::setBody(char *body, int lenght)
 {
   this->_body = body;
   this->_length = lenght;

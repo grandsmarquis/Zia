@@ -2,6 +2,7 @@
 #include "Request.h"
 
 Request::Request(char *buffer, int bufferLength)
+  : _body(buffer, bufferLength)
 {
 }
 
@@ -19,7 +20,7 @@ char	*Request::getBuffer()
   return (_buffer);
 }
 
-RequestHeade &Request::getHeader()
+RequestHeader &Request::getHeader()
 {
   return (_header);
 }
