@@ -1,33 +1,45 @@
 #include "Bucket.hpp"
 
 Bucket::Bucket(void)
+  :_size(0), _b(true)
 {
 }
 
-void Bucket::pushData(char *data)
+void Bucket::pushData(char *data, int size)
 {
-  char *pnt;
-  pnt = strtok(data, "\n");
-  while (pnt != NULL)
+  char *tmp;
+
+  if (size > 0)
     {
-      _q.push(new std::string(pnt));
-      pnt = strtok(NULL, "\n");
+      if (_b)
+	{
+	  _b = false;
+	  _data = new (char[size]);
+	  memcpy(_data, data, size);
+	}
+      else
+	{
+	  tmp = new char[size + _size];
+	  memcpy(tmp, _data, _size);
+	  memcpy(&(tmp[_size]), data, size);
+	  delete(_data);
+	  _data = tmp;
+	}
+      _size += size;
     }
 }
 
-std::string *Bucket::popLine(void)
+char *Bucket::getData()
 {
-  std::string *tmp = this->_q.front();
-  this->_q.pop();
-  return (tmp);
+  return (this->_data);
 }
 
-std::string *Bucket::peekLine(void)
+int Bucket::getSize() const
 {
-  return (this->_q.front());
+  return (this->_size);
 }
 
 bool Bucket::isEmpty(void) const
 {
-  return (this->_q.size() == 0);
+  return (this->_b);
 }
