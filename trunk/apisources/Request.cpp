@@ -1,13 +1,17 @@
 
 #include "Request.h"
+#include "../HTTPParser.hpp"
 
 Request::Request(char *buffer, int bufferLength)
   : _body(buffer, bufferLength)
 {
+  //  HTTPParser parser(buffer, bufferLength);
+  //_header(parser.getMap(), parser.getArg(), parser.getCmd(), parser.getVersion());
 }
 
 Request::~Request()
 {
+
 }
 
 Body	&Request::getBody()
@@ -32,4 +36,5 @@ int Request::getLength() const
 
 void Request::separate()
 {
+
 }

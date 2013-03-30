@@ -1,4 +1,5 @@
 
+#include "Request.h"
 #include "Daemon.hpp"
 
 #ifdef __unix__
@@ -47,7 +48,8 @@ void Daemon::ReceiveAll()
       this->_running = false;
       if (!_b.isEmpty())
 	{
-	  std::cout << _b.getData() << std::endl;
+	  Request req(_b.getData(), _b.getSize());
+	  //	  std::cout << _b.getData() << std::endl;
 	}
     }
 }

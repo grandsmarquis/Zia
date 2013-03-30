@@ -6,6 +6,7 @@ SRC= 		main.cpp			\
 		Daemon.cpp			\
 		DaemonManager.cpp		\
 		Bucket.cpp			\
+		HTTPParser.cpp			\
 		mutex/MutexCross.cpp		\
 		mutex/MutexUnix.cpp		\
 		net/EndPoint.cpp		\
