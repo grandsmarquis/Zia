@@ -28,6 +28,7 @@ RM=		rm -rf
 
 INCLUDES=	-I ./mutex/			\
 		-I  ./net/			\
+		-I  ./apiheaders		\
 		-I  ./thread/
 
 CPPFLAGS=	-g -W -Wall -Wextra $(INCLUDES)
