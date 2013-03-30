@@ -2,6 +2,7 @@
 #define EMBEDED_OBJECT_FACTORY_HPP__
 
 
+#include "apiheaders/Module.h"
 #include "IEmbededObjectFactory.hpp"
 
 #ifdef __unix__
@@ -13,6 +14,8 @@
 #include <windows.h>
 
 #include "DllObjectFactory.hpp"
+#include "apiheaders/ModuleInfos.h"
+#include "apiheaders/Directives.h"
 
 #endif
 
@@ -32,14 +35,16 @@ class EmbededObjectFactory {
 #endif
     }
 
-    ~EmbededObjectFactory() {
-
+    virtual ~EmbededObjectFactory() {
+      delete this->_factory;
     }
 
-    template<typename T>
-      T *getObjectFromLibrary(std::string const & library) {
-        return static_cast<T *>(this->_factory->getObjectFromLibrary(this->_path + library));
-      }
+    ModuleInfos *getModuleInfos(std::string const & library) {
+      return static_cast<ModuleInfos *>(this->_factory->getModuleInfos(this->_path + library));
+    }
+    Directives *getModuleDirectives(std::string const & library) {
+      return static_cast<Directives*>(this->_factory->getModuleDirectives(this->_path + library));
+    }
 };
 
 #endif

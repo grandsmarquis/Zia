@@ -1,5 +1,5 @@
 #ifndef __RESPONSE_H__
-# define __RESPONSE_H__
+#define __RESPONSE_H__
 
 #include "ResponseHeader.h"
 #include "Body.h"

@@ -2,6 +2,10 @@
 #define FILE_HPP__ 1
 
 #include "../../trunk/apiheaders/Directives.h"
+#include "../../trunk/apiheaders/DirectivesOrder.h"
+
+#include "../../trunk/apiheaders/Request.h"
+#include "../../trunk/apiheaders/Response.h"
 
 class File : public Directives
 {
@@ -11,12 +15,6 @@ class File : public Directives
     virtual void callDirective(DirectivesOrder, Request &);
     virtual void callDirective(DirectivesOrder, Response &);
     virtual void init();
-
-  private:
-    void cryptResponse(Response &);
-    void uncryptRequest(Request &);
-    void sendIdx(Response &);
-    int _idx;
 };
 
 
