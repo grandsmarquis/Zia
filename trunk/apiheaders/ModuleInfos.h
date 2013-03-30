@@ -2,10 +2,10 @@
 # define __MODULEINFOS_H__
 
 struct ModuleInfos {
-	std::string	const	associatedDLL;
+	std::string	associatedDLL;
 	char				managedDirectives;
-	bool				mangesHeaderOnly;
-	std::string	const	name;
+	bool				managesHeaderOnly;
+	std::string	name;
 	int					nbDirectives;
 };
 

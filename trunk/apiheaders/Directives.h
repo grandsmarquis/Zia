@@ -1,5 +1,5 @@
 #ifndef __DIRECTIVES_H__
-# define	__DIRECTIVES_H__
+#define __DIRECTIVES_H__
 
 #include "Request.h"
 #include "Response.h"
