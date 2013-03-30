@@ -16,8 +16,13 @@ SRC= 		main.cpp			\
 		net/TCPLinuxSocket.cpp		\
 		net/UDPLinuxSocket.cpp		\
 		net/UnixThreadSafeSocket.cpp	\
-		thread/ThreadUnix.cpp	\
-		thread/TLSUnix.cpp	
+		thread/ThreadUnix.cpp		\
+		thread/TLSUnix.cpp		\
+		apisources/Body.cpp		\
+		apisources/Response.cpp		\
+		apisources/ResponseHeader.cpp	\
+		apisources/Request.cpp		\
+		apisources/RequestHeader.cpp	
 
 
 OBJ=		$(SRC:.cpp=.o)
