@@ -22,7 +22,8 @@ SRC= 		main.cpp			\
 		apisources/Response.cpp		\
 		apisources/ResponseHeader.cpp	\
 		apisources/Request.cpp		\
-		apisources/RequestHeader.cpp	
+		apisources/RequestHeader.cpp	\
+		SoObjectFactory.cpp
 
 
 OBJ=		$(SRC:.cpp=.o)
@@ -38,12 +39,12 @@ INCLUDES=	-I ./mutex/			\
 
 CPPFLAGS=	-g -W -Wall -Wextra $(INCLUDES)
 
-LIBS=		-lpthread
+LIBS=		-lpthread -ldl
 
 all:		$(NAME)
 
 $(NAME):	$(OBJ)
-		$(CC) $(OBJ) -o $(NAME) $(LIBS)
+		$(CC) -rdynamic $(OBJ) -o $(NAME) $(LIBS)
 
 clean:
 		$(RM) $(OBJ)
