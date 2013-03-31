@@ -4,6 +4,7 @@
 Response::Response(char *buffer, int bufferLength)
   :_body(buffer, bufferLength)
 {
+  
 }
 
 Response::~Response()
