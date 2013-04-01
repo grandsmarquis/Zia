@@ -5,8 +5,15 @@
 Request::Request(char *buffer, int bufferLength)
   : _body(buffer, bufferLength)
 {
-  //  HTTPParser parser(buffer, bufferLength);
-  //_header(parser.getMap(), parser.getArg(), parser.getCmd(), parser.getVersion());
+  HTTPParser parser(buffer, bufferLength);
+  _header.setCommand(parser.getCmd());
+  _header.setArg(parser.getArg());
+  _header.setVersion(parser.getVersion());
+  for (std::map<std::string, std::string>::const_iterator it = parser.getMap().begin(); it != parser.getMap().end(); ++it)
+    {
+      _header.setValue(it->first, it->second);
+    }
+  
 }
 
 Request::~Request()

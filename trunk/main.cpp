@@ -13,24 +13,24 @@
 
 int main()
 {
-  EmbededObjectFactory objectFactory("../modules/");
+  // EmbededObjectFactory objectFactory("../modules/");
   DaemonManager manager;
-  Response response(NULL, 0);
+  // Response response(NULL, 0);
 
-  ModuleInfos * moduleInfos = objectFactory.getModuleInfos("file/file");
-  Directives * moduleDirectives = objectFactory.getModuleDirectives("file/file");
+  // ModuleInfos * moduleInfos = objectFactory.getModuleInfos("file/file");
+  // Directives * moduleDirectives = objectFactory.getModuleDirectives("file/file");
 
-  std::cout << moduleInfos->associatedDLL << std::endl;
-  std::cout << moduleInfos->name << std::endl;
+  // std::cout << moduleInfos->associatedDLL << std::endl;
+  // std::cout << moduleInfos->name << std::endl;
 
 
-  moduleDirectives->init();
-  moduleDirectives->callDirective(CREATE_RESPONSE, response);
+  // moduleDirectives->init();
+  // moduleDirectives->callDirective(CREATE_RESPONSE, response);
 
-  delete moduleDirectives;
-  delete moduleInfos;
+  // delete moduleDirectives;
+  // delete moduleInfos;
 
-  return 0;
+  // return 0;
 
 
   manager.addPort(3030);

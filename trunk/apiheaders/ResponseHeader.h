@@ -21,6 +21,7 @@ public:
 	bool					hasKey(std::string const & value);
 	void					setStatusCode(std::string const & statusCode);
 	void					setStatusMessage(std::string const & statusMessage);
+	std::map<std::string, std::string> const & getOptions() const;
 	void					setValue(std::string const & headerAttribut, std::string const & value);
 	void					setVersion(std::string const & version);
 };

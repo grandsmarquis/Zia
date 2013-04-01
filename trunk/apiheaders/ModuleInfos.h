@@ -1,8 +1,6 @@
 #ifndef __MODULEINFOS_H__
 # define __MODULEINFOS_H__
 
-#include "DirectivesOrder.h"
-
 struct ModuleInfos {
 	std::string	associatedDLL;
 	char				managedDirectives;

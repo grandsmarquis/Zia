@@ -56,7 +56,6 @@ void Daemon::ReceiveAll()
 
 void Daemon::work()
 {
-  bool status = false;
   
   std::cout << "CONNECTION_INIT" << std::endl;
   while (this->_running)
@@ -69,9 +68,6 @@ void Daemon::work()
 	std::cout << "PROCESS_FINISHED_RESPONSE" << std::endl;
 	std::cout << "PRESENDING_PROCESSING" << std::endl;
       */
-      if (status)
-	{
-	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
 }

@@ -53,3 +53,8 @@ void RequestHeader::setVersion(std::string const & version)
 {
   _version = version;
 }
+
+void RequestHeader::setValue(std::string const & key, std::string const & value)
+{
+  _options[key] = value;
+}

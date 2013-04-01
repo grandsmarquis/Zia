@@ -39,10 +39,6 @@ HTTPParser::HTTPParser(char *buffer, int size)
 	  state += 1;
 	}
     }
-  std::cout << "::" << _cmd << "::" << _arg << "::" << _version <<std::endl;
-  for(std::map<std::string, std::string>::iterator it = _map.begin(); it!= _map.end(); ++it) {
-    std::cout << it->first << " ::: " << it->second << std::endl;
-  }
 }
 
 void HTTPParser::parseHeader(char *buffer, int size)
