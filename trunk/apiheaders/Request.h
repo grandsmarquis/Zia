@@ -5,18 +5,20 @@
 #include "Body.h"
 
 class Request {
-	char	*_buffer;
-	int		_bufferLength;
-	RequestHeader	_header;
-	Body			_body;
-public:
-	Request (char *buffer, int bufferLength);
-	~Request ();
-	Body &			getBody();
-	char			*getBuffer();
-	RequestHeader &	getHeader();
-	int				getLength() const;
-	void			separate();
+  private:
+    char *_buffer;
+    int _bufferLength;
+    RequestHeader _header;
+    Body _body;
+
+  public:
+    Request (char *buffer, int bufferLength);
+    ~Request ();
+    Body & getBody();
+    char *getBuffer();
+    RequestHeader & getHeader();
+    int getLength() const;
+    void separate();
 };
 
 #endif // !_REQUEST_H_

@@ -5,6 +5,7 @@
 Request::Request(char *buffer, int bufferLength)
   : _body(buffer, bufferLength)
 {
+  /*
   HTTPParser parser(buffer, bufferLength);
   _header.setCommand(parser.getCmd());
   _header.setArg(parser.getArg());
@@ -13,7 +14,7 @@ Request::Request(char *buffer, int bufferLength)
     {
       _header.setValue(it->first, it->second);
     }
-  
+  */
 }
 
 Request::~Request()

@@ -1,4 +1,6 @@
 
+#include <stdio.h>
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -7,6 +9,8 @@
 #include "../../trunk/apiheaders/DirectivesOrder.h"
 
 #include "File.hpp"
+
+int File::toto = 42;
 
 extern "C"
 {
@@ -42,23 +46,50 @@ void File::init()
   std::cout << "init file" << std::endl;
 }
 
-void File::callDirective(DirectivesOrder dir, Request & req)
-{
-  /*
-  if (dir == PREPROCESS_REQUEST)
-    this->uncryptRequest(req);
-  */
+void File::_getContentType(std::string & const path) {
+  size_t pos = path.find_last_of('.');
+
+  if (pos != string::npos) {
+    std::string ext;
+
+    ext = path.substr(pos);
+
+  }
 }
 
-void File::callDirective(DirectivesOrder dir, Response & res)
-{
-  if (dir == CREATE_RESPONSE) {
-    std::cout << "hello world" << std::endl;
+void File::_getEncoding(char *buff) {
+
+  if (buff[0] == 0x3C && buff[1] != 0) {
+    std::cout << "UTF-8" << std::endl;
   }
-  /*
-  if (dir == CONNECTION_INIT)
-    this->sendIdx(res);
-  else if (dir == PROCESS_FINISHED_RESPONSE)
-    this->cryptResponse(res);
-  */
+
+  printf("0x%X 0x%x\n", buff[0], buff[1]);
+}
+
+void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
+{
+  int length;
+  char *buff;
+  std::string path = "../www/index.html";
+  std::ifstream resource(path.c_str(), std::ifstream::in);
+
+  if (resource.is_open()) {
+    if (resource.fail()) {
+      std::cerr << "unable to read " << path << std::endl;
+    } else {
+
+      resource.seekg(0, std::ifstream::end);
+      length = resource.tellg();
+      resource.seekg(0, std::ifstream::beg);
+      buff = new char[length];
+      resource.read(buff, length);
+
+      this->_getEncoding(buff);
+
+      std::cout.write(buff, length);
+    }
+    resource.close();
+  } else {
+    std::cerr << "unable to open " << path << std::endl;
+  }
 }
