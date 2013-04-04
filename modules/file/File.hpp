@@ -25,6 +25,7 @@ class File : public Directives
     */
 
     void _getEncoding(char *buff);
+    void _getContentType(std::string const & path);
 
   public:
     File();

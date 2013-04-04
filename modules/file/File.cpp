@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
+#include <boost/filesystem.hpp>
 #include <string>
 
 #include "../../trunk/apiheaders/ModuleInfos.h"
@@ -46,10 +47,10 @@ void File::init()
   std::cout << "init file" << std::endl;
 }
 
-void File::_getContentType(std::string & const path) {
+void File::_getContentType(std::string const & path) {
   size_t pos = path.find_last_of('.');
 
-  if (pos != string::npos) {
+  if (pos != std::string::npos) {
     std::string ext;
 
     ext = path.substr(pos);
@@ -78,9 +79,9 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
       std::cerr << "unable to read " << path << std::endl;
     } else {
 
-      resource.seekg(0, std::ifstream::end);
-      length = resource.tellg();
-      resource.seekg(0, std::ifstream::beg);
+      length = boost::filesystem::file_size(path);
+      std::cout << length << " bytes " << std::endl;
+
       buff = new char[length];
       resource.read(buff, length);
 

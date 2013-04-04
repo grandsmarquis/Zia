@@ -1,11 +1,12 @@
-NAME = file.so
+NAME = file
 
-SRC =	File.cpp
+SRC =	File.cpp \
+			main.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
-CXXFLAGS = -fPIC
-LDFLAGS = -shared -fPIC -lboost_filesystem -lboost_filesystem
+CXXFLAGS =
+LDFLAGS = -lboost_system -lboost_filesystem
 
 $(NAME): $(OBJ)
 	$(CXX) -o $(NAME) $(OBJ) $(LDFLAGS)
