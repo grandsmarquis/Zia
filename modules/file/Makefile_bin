@@ -6,7 +6,7 @@ SRC =	File.cpp \
 OBJ = $(SRC:.cpp=.o)
 
 CXXFLAGS =
-LDFLAGS = -lboost_system -lboost_filesystem
+LDFLAGS = -lboost_system -lboost_filesystem -lboost_locale
 
 $(NAME): $(OBJ)
 	$(CXX) -o $(NAME) $(OBJ) $(LDFLAGS)

@@ -12,20 +12,7 @@
 class File : public Directives
 {
   private:
-
-    static int toto;
-    /*
-    static struct {
-      char *ext;
-      char *contentType;
-    } _contentTypes[] = {
-      {"html", "text/html"},
-      {"htm", "text/html"}
-    };
-    */
-
-    void _getEncoding(char *buff);
-    void _getContentType(std::string const & path);
+    std::string _getContentType(std::string const & path);
 
   public:
     File();

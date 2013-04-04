@@ -2,16 +2,16 @@
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
-#include <boost/filesystem.hpp>
 #include <string>
+
+#include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "../../trunk/apiheaders/ModuleInfos.h"
 #include "../../trunk/apiheaders/Directives.h"
 #include "../../trunk/apiheaders/DirectivesOrder.h"
 
 #include "File.hpp"
-
-int File::toto = 42;
 
 extern "C"
 {
@@ -44,36 +44,60 @@ File::~File()
 
 void File::init()
 {
-  std::cout << "init file" << std::endl;
+  int length;
+  char *buff;
+  std::string path = "../www/index.html";
+
+  std::cout << this->_getContentType(path) << std::endl;
 }
 
-void File::_getContentType(std::string const & path) {
+struct mapping {
+  const char * extension;
+  const char * mime_type;
+} _contentTypes[] =
+{
+  { "gif",   "image/gif"  },
+  { "htm",   "text/html"  },
+  { "html",  "text/html"  },
+  { "jpg",   "image/jpeg" },
+  { "jpeg",  "image/jpeg" },
+  { "png",   "image/png"  },
+  { "svg",   "image/svg+xml" },
+  { "js",    "application/javascript" },
+  { "css",   "text/css" },
+  { "ttf",   "application/x-font-ttf" },
+  { "xhtml", "application/xhtml+xml" },
+  { "xhtm",  "application/xhtml+xml" },
+  { 0, 0 }
+};
+
+std::string File::_getContentType(std::string const & path) {
   size_t pos = path.find_last_of('.');
+  std::string ext;
 
   if (pos != std::string::npos) {
-    std::string ext;
-
-    ext = path.substr(pos);
-
-  }
-}
-
-void File::_getEncoding(char *buff) {
-
-  if (buff[0] == 0x3C && buff[1] != 0) {
-    std::cout << "UTF-8" << std::endl;
+    ext = (path.substr(pos + 1));
+    boost::to_lower(ext);
+    for (mapping* m = _contentTypes; m->extension ; ++m)
+    {
+      if (m->extension == ext)
+      {
+        return m->mime_type;
+      }
+    }
   }
 
-  printf("0x%X 0x%x\n", buff[0], buff[1]);
+  return "text/plain";
 }
 
 void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
 {
-  int length;
-  char *buff;
-  std::string path = "../www/index.html";
-  std::ifstream resource(path.c_str(), std::ifstream::in);
+  // RequestHeader requestHeader = request.getHeader();
+  // ResponseHeader responseHeader = response.getHeader();
 
+  // std::ifstream resource(path.c_str(), std::ifstream::in);
+
+  /*
   if (resource.is_open()) {
     if (resource.fail()) {
       std::cerr << "unable to read " << path << std::endl;
@@ -93,4 +117,5 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
   } else {
     std::cerr << "unable to open " << path << std::endl;
   }
+  */
 }
