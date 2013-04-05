@@ -18,9 +18,11 @@ HTTPParser::HTTPParser(char *buffer, int size)
 	  tmp = strtok(_tmp, " ");
 	  _cmd = tmp;
 	  tmp = strtok(NULL, " ");
-	  _arg = tmp;
+	  if (tmp)
+	    _arg = tmp;
 	  tmp = strtok(NULL, " ");
-	  _version = tmp;
+	  if (tmp)
+	    _version = tmp;
 	  state += 1;
 	}
       else if (state == 1 && tmp)
@@ -28,10 +30,14 @@ HTTPParser::HTTPParser(char *buffer, int size)
 	  tmp = strtok(_tmp, ":");
 	  one = tmp;
 	  tmp2 = strtok(NULL, "\n");
-	  if (tmp2)
+	  if (!one.empty() && tmp2)
 	    {
 	      two = tmp2;
 	      _map[one] = two;
+	    }
+	  else
+	    {
+	      _body = ss.str();
 	    }
 	}
       else
@@ -39,14 +45,6 @@ HTTPParser::HTTPParser(char *buffer, int size)
 	  state += 1;
 	}
     }
-}
-
-void HTTPParser::parseHeader(char *buffer, int size)
-{
-}
-
-void HTTPParser::parseBody(char *buffer, int size)
-{
 }
 
 std::string const &HTTPParser::getArg() const
@@ -62,6 +60,11 @@ std::string const &HTTPParser::getCmd() const
 std::string const &HTTPParser::getVersion() const
 {
   return (_version);
+}
+
+std::string const &HTTPParser::getBody() const
+{
+  return (_body);
 }
 
 std::map<std::string, std::string> const &HTTPParser::getMap() const

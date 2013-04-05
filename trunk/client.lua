@@ -4,8 +4,16 @@ local tcp = assert(socket.tcp())
 
 tcp:connect(host, port);
 
-tcp:send("hello world\n");
-tcp:send("fksljsdlkjflksdjlfkjsdlfjsdklfskdfsd");
+tcp:send("he         l              lo w             orld\n");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
+tcp:send("END\n");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
+tcp:send("fksljsdlkjfl::ksdj::lfkjsdlfjsdklfskdfsd");
 tcp:send("END\n");
 while true do
     local s, status, partial = tcp:receive()

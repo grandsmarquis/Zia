@@ -14,12 +14,11 @@ class HTTPParser
 {
 public:
   HTTPParser(char *buffer, int bufferLenght);
-  void parseHeader(char *, int);
-  void parseBody(char *, int);
 
   std::string const &getArg() const;
   std::string const &getCmd() const;
   std::string const &getVersion() const;
+  std::string const &getBody() const;
   std::map<std::string, std::string> const &getMap() const;
 
 private:
@@ -27,6 +26,7 @@ private:
   std::string _cmd;
   std::string _version;
   std::map<std::string, std::string> _map;
+  std::string _body;
 
 };
 
