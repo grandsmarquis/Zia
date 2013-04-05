@@ -5,6 +5,7 @@
 #include <libconfig.h++>
 #include <list>
 #include <string>
+#include <iostream>
 
 class ConfigManager
 {
