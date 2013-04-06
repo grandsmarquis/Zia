@@ -20,8 +20,51 @@ ConfigManager::ConfigManager(std::string const &name)
 		<< " - " << pex.getError() << std::endl;
       return;
     }
+  parse(cfg.getRoot());
 }
 
-std::list<std::string> const &ConfigManager::getModuler(void) const
+void ConfigManager::parse(const libconfig::Setting &root)
 {
+  if (root.exists("ports"))
+    {
+      const libconfig::Setting &ports = root["ports"];
+      if (ports.isArray())
+	{
+	  int count = ports.getLength();
+	  for (int i = 0; i < count; ++i)
+	    {
+	      const libconfig::Setting &port = ports[i];
+	      if (port.isNumber())
+		{
+		  _ports.push_front(port);
+		}
+	    }
+	}
+    }
+  if (root.exists("modules"))
+    {
+      const libconfig::Setting &modules = root["modules"];
+      if (modules.isArray())
+	{
+	  int count = modules.getLength();
+	  for (int i = 0; i < count; ++i)
+	    {
+	      const libconfig::Setting &module = modules[i];
+	      if (module.isScalar())
+		{
+		  _modules.push_front(module);
+		}
+	    }
+	}
+    }
+}
+
+std::list<std::string> const &ConfigManager::getModules(void) const
+{
+  return (_modules);
+}
+
+std::list<int> const &ConfigManager::getPorts(void) const
+{
+  return (_ports);
 }

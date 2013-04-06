@@ -47,3 +47,14 @@ void DaemonManager::update()
 
   }
 }
+
+void DaemonManager::loadConf(ConfigManager const &cfg)
+{
+  std::list<int>::const_iterator iter;
+  
+  
+  for (iter = cfg.getPorts().begin(); iter != cfg.getPorts().end(); ++iter)
+    {
+      this->addPort(*iter);
+    }
+}

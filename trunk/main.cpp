@@ -36,9 +36,8 @@ int main()
   DaemonManager manager;
   ConfigManager config("../default.cfg");
 
-  manager.addPort(3030);
-  manager.addPort(2020);
-  manager.addPort(80);
+  
+  manager.loadConf(config);
   while (true)
     manager.update();
 

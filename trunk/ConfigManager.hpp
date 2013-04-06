@@ -11,10 +11,14 @@ class ConfigManager
 {
 public:
   ConfigManager(std::string const &name);
-  std::list<std::string> const &getModuler(void) const;
+  std::list<std::string> const &getModules(void) const;
+  std::list<int> const &getPorts(void) const;
   
 private:
   std::list<std::string> _modules;
+  std::list<int> _ports;
+
+  void parse(const libconfig::Setting &root);
 };
 
 #endif
