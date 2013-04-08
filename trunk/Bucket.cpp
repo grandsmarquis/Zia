@@ -1,45 +1,44 @@
 #include "Bucket.hpp"
+#include <iostream>
+#include <vector>
 
 Bucket::Bucket(void)
-  :_size(0), _b(true)
 {
 }
 
-void Bucket::pushData(char *data, int size)
+bool Bucket::pushData(char *data, int size)
 {
-  char *tmp;
-
-  if (size > 0)
-    {
-      if (_b)
-	{
-	  _b = false;
-	  _data = new (char[size]);
-	  memcpy(_data, data, size);
-	}
-      else
-	{
-	  tmp = new char[size + _size];
-	  memcpy(tmp, _data, _size);
-	  memcpy(&(tmp[_size]), data, size);
-	  delete(_data);
-	  _data = tmp;
-	}
-      _size += size;
-    }
+  data[size] = '\0';
+  _str += data;
+  return (false);
 }
 
 char *Bucket::getData()
 {
-  return (this->_data);
+  std::string str3 = _str.substr(_str.find("\r\n"));
+  char * writable = new char[str3.size() + 1];
+  std::copy(_str.begin(), str3.end(), writable);
+  writable[str3.size()] = '\0';
+  _str.erase(0, str3.size());
+  _size = str3.size();
+  return (writable);
+}
+
+bool Bucket::canCut() const
+{
+  if (std::string::npos != _str.find("\r\n"))
+    {
+      return (true);
+    }
+  return (false);
 }
 
 int Bucket::getSize() const
 {
-  return (this->_size);
+  return (_size);
 }
 
 bool Bucket::isEmpty(void) const
 {
-  return (this->_b);
+  return (this->_str.empty());
 }

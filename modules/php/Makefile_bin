@@ -11,8 +11,8 @@ SRC =	PHPModule.cpp \
 
 OBJ = $(SRC:.cpp=.o)
 
-CXXFLAGS =
-LDFLAGS =
+CXXFLAGS = -W -Wall -I ../../trunk -I ../../trunk/apiheaders
+LDFLAGS = -lboost_system -lboost_filesystem
 
 $(NAME): $(OBJ)
 	$(CXX) -o $(NAME) $(OBJ) $(LDFLAGS)

@@ -20,9 +20,22 @@ int main()
 
   // std::cout << moduleInfos->associatedDLL << std::endl;
   // std::cout << moduleInfos->name << std::endl;
+  std::string req(
+      "GET /page.html?toto=tutu&tata=titi HTTP/1.0\n"
+      "Host: example.com\n"
+      "Referer: http://example.com/\n"
+      "User-Agent: CERN-LineMode/2.15 libwww/2.17b3\n"
+  );
 
-  Request request(NULL, 0);
+  int size = req.size();
+  char *buff = new char[size];
+
+  req.copy(buff, size);
+
+  Request request(buff, size);
   Response response(NULL, 0);
+
+  request.separate();
 
   moduleDirectives->init();
   moduleDirectives->callDirective(CREATE_RESPONSE, request, response);

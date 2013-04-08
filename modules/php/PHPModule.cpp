@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 
+#include <boost/filesystem.hpp>
+
 #include "../../trunk/apiheaders/ModuleInfos.h"
 #include "../../trunk/apiheaders/Directives.h"
 #include "../../trunk/apiheaders/DirectivesOrder.h"
@@ -49,42 +51,67 @@ void PHPModule::init()
 
 void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
 {
-
   RequestHeader requestHeader = request.getHeader();
 
-  std::cout << requestHeader.hasKey("toto") << std::endl;
-  std::cout << requestHeader.getValueForKey("toto") << std::endl;
+  // std::cout << requestHeader.getVersion() << std::endl;
+
+  std::string script, query, uri = requestHeader.getArg(), pathInfo = boost::filesystem::current_path().native(), path = getenv("PATH");
+  size_t pos = uri.find_first_of('?');
+
+  if (pos == std::string::npos) {
+    script = uri;
+  } else {
+    script = uri.substr(0, pos);
+    query = uri.substr(pos + 1);
+  }
 
   std::map<std::string, std::string> env;
 
   env["DOCUMENT_ROOT"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
   env["GATEWAY_INTERFACE"] = "CGI/1.1";
   env["HOME"] = "/home/SYSTEM";
-  env["HTTP_ACCEPT"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-  env["HTTP_ACCEPT_CHARSET"] = "ISO-8859-1,utf-8;q=0.7,*;q=0.7";
-  env["HTTP_ACCEPT_ENCODING"] = "gzip, deflate";
-  env["HTTP_ACCEPT_LANGUAGE"] = "en-us,en;q=0.5";
-  env["HTTP_CONNECTION"] = "keep-alive";
-  env["HTTP_HOST"] = "example.com";
-  env["HTTP_USER_AGENT"] = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0";
-  env["PATH"] = "/home/SYSTEM/bin:/bin:/cygdrive/c/progra~2/php:/cygdrive/c/windows/system32:...";
-  env["PATHEXT"] = ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC";
-  env["PATH_INFO"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
-  env["PATH_TRANSLATED"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
-  env["QUERY_STRING"] = "var1=value1&var2=with%20percent%20encoding";
+
+  if (requestHeader.hasKey("Accept"))
+    env["HTTP_ACCEPT"] = requestHeader.getValueForKey("Accept");
+
+  if (requestHeader.hasKey("Accept-Encoding"))
+    env["HTTP_ACCEPT_ENCODING"] = requestHeader.getValueForKey("Accept-Encoding");
+
+  if (requestHeader.hasKey("Accept-Charset"))
+    env["HTTP_ACCEPT_CHARSET"] = requestHeader.getValueForKey("Accept-Charset");
+
+  if (requestHeader.hasKey("Accept-Language"))
+    env["HTTP_ACCEPT_LANGUAGE"] = requestHeader.getValueForKey("Accept-Language");
+
+  if (requestHeader.hasKey("Connection"))
+    env["HTTP_CONNECTION"] = requestHeader.getValueForKey("Connection");
+
+  if (requestHeader.hasKey("Host"))
+    env["HTTP_HOST"] = requestHeader.getValueForKey("Host");
+
+  if (requestHeader.hasKey("User-Agent"))
+    env["HTTP_USER_AGENT"] = requestHeader.getValueForKey("User-Agent");
+
+  env["PATH"] = path;
+  // env["PATHEXT"] = ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC";
+  env["PATH_INFO"] = pathInfo;
+  env["PATH_TRANSLATED"] = pathInfo;
+  env["QUERY_STRING"] = query;
   // env["REMOTE_ADDR"] = "127.0.0.1";
   // env["REMOTE_PORT"] = "63555";
   env["REQUEST_METHOD"] = requestHeader.getCommand();
-  env["REQUEST_URI"] = "/index.php/foo/bar?var1=value1&var2=with%20percent%20encoding";
-  env["SCRIPT_FILENAME"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php/index.php";
-  env["SCRIPT_NAME"] = "/index.php";
+  env["REQUEST_URI"] = requestHeader.getArg();
+  env["SCRIPT_FILENAME"] = pathInfo + "/"  + script;
+  env["SCRIPT_NAME"] = script;
+
   env["SERVER_ADDR"] = "127.0.0.1";
   env["SERVER_ADMIN"] = "(server admin's email address)";
   env["SERVER_NAME"] = "127.0.0.1";
   env["SERVER_PORT"] = "80";
-  env["SERVER_PROTOCOL"] = "HTTP/1.1";
+  env["SERVER_PROTOCOL"] = requestHeader.getVersion();
   env["SERVER_SIGNATURE"] = "";
   env["SERVER_SOFTWARE"] = "a.out server";
+
   env["SYSTEMROOT"] = "/";
   env["REDIRECT_STATUS"] = "true";
 

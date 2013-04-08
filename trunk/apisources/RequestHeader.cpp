@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include "RequestHeader.h"
 
 RequestHeader::RequestHeader()

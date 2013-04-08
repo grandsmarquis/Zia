@@ -4,20 +4,22 @@
 
 #include <stdio.h>
 #include <cstring>
+#include <string>
 
 class Bucket
 {
 
 public:
   Bucket(void);
-  void pushData(char *data, int size);
+  bool pushData(char *data, int size);
   int getSize(void) const;
   bool isEmpty(void) const;
   char *getData(void);
+  bool canCut() const;
 private:
-  int _size;
-  char *_data;
+  std::string _str;
   bool _b;
+  int _size;
 };
 
 #endif
