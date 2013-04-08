@@ -34,19 +34,23 @@ int Request::getLength() const
 
 void Request::separate()
 {
-  char * body;
   int buffer_length;
 
-  body = this->_body.getBody();
   buffer_length = this->_body.getBodyLength();
-
-  HTTPParser parser(body, buffer_length);
-
-  _header.setCommand(parser.getCmd());
-  _header.setArg(parser.getArg());
-  _header.setVersion(parser.getVersion());
-  for (std::map<std::string, std::string>::const_iterator it = parser.getMap().begin(); it != parser.getMap().end(); ++it)
+  if (buffer_length > 0)
   {
-    _header.setValue(it->first, it->second);
+    char * body;
+
+    body = this->_body.getBody();
+
+    HTTPParser parser(body, buffer_length);
+
+    _header.setCommand(parser.getCmd());
+    _header.setArg(parser.getArg());
+    _header.setVersion(parser.getVersion());
+    for (std::map<std::string, std::string>::const_iterator it = parser.getMap().begin(); it != parser.getMap().end(); ++it)
+    {
+      _header.setValue(it->first, it->second);
+    }
   }
 }

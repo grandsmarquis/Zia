@@ -24,7 +24,8 @@ SRC= 		main.cpp			\
 		apisources/ResponseHeader.cpp	\
 		apisources/Request.cpp		\
 		apisources/RequestHeader.cpp	\
-		SoObjectFactory.cpp
+		SoObjectFactory.cpp		\
+		ConfigManager.cpp
 
 
 OBJ=		$(SRC:.cpp=.o)
@@ -40,7 +41,7 @@ INCLUDES=	-I ./mutex/			\
 
 CPPFLAGS=	-g -W -Wall -Wextra $(INCLUDES)
 
-LIBS=		-lpthread -ldl
+LIBS=		-lpthread -ldl -lconfig++
 
 all:		$(NAME)
 
