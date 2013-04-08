@@ -49,7 +49,12 @@ void PHPModule::init()
 
 void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
 {
-  std::cout << "klsefjklsdjhfjklsldfhjsdhjfsdjhkjhkfsdjhkfsdsdf" << std::endl;
+
+  RequestHeader requestHeader = request.getHeader();
+
+  std::cout << requestHeader.hasKey("toto") << std::endl;
+  std::cout << requestHeader.getValueForKey("toto") << std::endl;
+
   std::map<std::string, std::string> env;
 
   env["DOCUMENT_ROOT"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
@@ -67,9 +72,9 @@ void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request,
   env["PATH_INFO"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
   env["PATH_TRANSLATED"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
   env["QUERY_STRING"] = "var1=value1&var2=with%20percent%20encoding";
-  env["REMOTE_ADDR"] = "127.0.0.1";
-  env["REMOTE_PORT"] = "63555";
-  env["REQUEST_METHOD"] = "GET";
+  // env["REMOTE_ADDR"] = "127.0.0.1";
+  // env["REMOTE_PORT"] = "63555";
+  env["REQUEST_METHOD"] = requestHeader.getCommand();
   env["REQUEST_URI"] = "/index.php/foo/bar?var1=value1&var2=with%20percent%20encoding";
   env["SCRIPT_FILENAME"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php/index.php";
   env["SCRIPT_NAME"] = "/index.php";
