@@ -58,6 +58,23 @@ void ConfigManager::parse(const libconfig::Setting &root)
 	    }
 	}
     }
+  if (root.exists("modulePath"))
+    {
+      const libconfig::Setting &path = root["modulePath"];
+      if (path.isScalar())
+	{
+	  _path += path.c_str();
+	}
+    }
+  if (root.exists("author"))
+    {
+      const libconfig::Setting &author = root["author"];
+      if (author.isScalar())
+	{
+	  _author += author.c_str();
+	}
+    }
+
 }
 
 std::list<std::string> const &ConfigManager::getModules(void) const
@@ -70,6 +87,15 @@ std::list<int> const &ConfigManager::getPorts(void) const
   return (_ports);
 }
 
+std::string const &ConfigManager::getModulePath(void) const
+{
+  return (_path);
+}
+
+std::string const &ConfigManager::getAuthor(void) const
+{
+  return (_author);
+}
 
 void ConfigManager::setDefaults(void)
 {

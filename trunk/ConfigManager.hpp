@@ -13,10 +13,14 @@ public:
   ConfigManager(std::string const &name);
   std::list<std::string> const &getModules(void) const;
   std::list<int> const &getPorts(void) const;
+  std::string const &getModulePath(void) const;
+  std::string const &getAuthor(void) const;
   
 private:
   std::list<std::string> _modules;
   std::list<int> _ports;
+  std::string _path;
+  std::string _author;
 
   void parse(const libconfig::Setting &root);
   void setDefaults(void);

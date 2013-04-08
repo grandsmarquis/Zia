@@ -21,8 +21,8 @@
 
 
 
-Daemon::Daemon(net::ISocket *socket, int port)
-  : _socket(socket), _port(port), _running(true)
+Daemon::Daemon(DaemonManager *manager, net::ISocket *socket, int port, ModuleContainerList *list)
+  : _socket(socket), _port(port), _running(true), _man(manager), _modules(list)
 {
 #ifdef __unix__
   this->_thread = new ThreadUnix();
@@ -48,26 +48,27 @@ void Daemon::ReceiveAll()
       this->_running = false;
       if (!_b.isEmpty())
 	{
-	  Request req(_b.getData(), _b.getSize());
-	  //	  std::cout << _b.getData() << std::endl;
+	  Request *req = new Request(_b.getData(), _b.getSize());
+	  _reqs.push_front(req);
 	}
     }
 }
 
 void Daemon::work()
 {
-  
   std::cout << "CONNECTION_INIT" << std::endl;
   while (this->_running)
     {
       this->ReceiveAll();
-      /*
-	std::cout << "PREPROCESS_REQUEST" << std::endl;
-	std::cout << "PROCESS_REQUEST" << std::endl;
-	std::cout << "CREATE_RESPONSE" << std::endl;
-	std::cout << "PROCESS_FINISHED_RESPONSE" << std::endl;
-	std::cout << "PRESENDING_PROCESSING" << std::endl;
-      */
+      if (!_reqs.empty())
+	{
+	  std::list<Request *>::iterator iter;
+	  for (iter = _reqs.begin(); iter != _reqs.end(); ++iter)
+	    {
+	      Response resp(NULL, 0);
+	      call(PREPROCESS_REQUEST, *(*iter), resp);
+	    }
+	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
 }
@@ -81,4 +82,14 @@ void Daemon::stop()
 {
   this->_running = false;
   this->_thread->thread_cancel();
+}
+
+void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp)
+{
+  std::list<ModuleContainer *>::iterator iter;
+
+  for (iter = _modules->_list.begin(); iter != _modules->_list.end(); ++iter)
+    {
+      (*iter)->_directives->callDirective(directiveorder, req, resp);
+    }
 }

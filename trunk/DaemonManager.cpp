@@ -18,15 +18,6 @@ void DaemonManager::addPort(int port)
 
 void DaemonManager::addModule(std::string const &name)
 {
-  EmbededObjectFactory objectFactory("../modules/");
-
-  ModuleInfos *moduleInfos = objectFactory.getModuleInfos(name);
-  Directives *moduleDirectives = objectFactory.getModuleDirectives(name);
-
-  if (!moduleInfos || !moduleDirectives)
-    std::cerr << "Unable to load module : " << name << "." << std::endl;
-
-  //Check error and add to map
 
 }
 
@@ -52,36 +43,52 @@ void DaemonManager::update()
   std::map<int, Listener *>::iterator iter;
   net::ISocket *tmp;
 
-
   for (iter = _port.begin(); iter != _port.end(); ++iter) {
-    tmp = iter->second->getNewClient();
-
-    if (tmp)
-      _dList.push_front(new Daemon(tmp, iter->first));
+    if (iter->second->shouldExist())
+      {
+	tmp = iter->second->getNewClient();
+	if (tmp)
+	  _dList.push_front(new Daemon(this, tmp, iter->first, _modules));
+      }
   }
 }
 
 void DaemonManager::loadConf(ConfigManager const &cfg)
 {
   std::list<int>::const_iterator iter;
-  std::list<std::string>::const_iterator citer;
-    
+
+  unloadConf();    
   for (iter = cfg.getPorts().begin(); iter != cfg.getPorts().end(); ++iter)
     {
-      this->addPort(*iter);
+      if (this->isListeningOn(*iter))
+	{
+	  _port[*iter]->setExistance(true);
+	}
+      else
+	this->addPort(*iter);
     }
-  for (citer = cfg.getModules().begin(); citer != cfg.getModules().end(); ++citer)
+  if (_modules)
+    delete(_modules);
+  _modules = new ModuleContainerList(cfg.getModulePath(), cfg.getModules());
+}
+
+void DaemonManager::unloadConf(void)
+{
+  std::map<int, Listener *>::const_iterator iter;
+
+  for (iter = _port.begin(); iter != _port.end(); ++iter)
     {
-      this->addModule(*citer);
+      iter->second->setExistance(false);
     }
 }
 
-std::map<ModuleInfos *, Directives *> const &DaemonManager::getModules() const
+void DaemonManager::breakDaemons(void)
 {
-  return (_mList);
-}
-
-int DaemonManager::getNbModules() const
-{
-  return (_mList.size());
+  std::list<Daemon *>::iterator iter;
+    
+  for (iter = _dList.begin(); iter != _dList.end(); ++iter)
+    {
+      (*iter)->stop();
+      delete(*iter);
+    } 
 }

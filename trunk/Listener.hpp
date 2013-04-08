@@ -20,6 +20,9 @@ public:
   int getPort(void) const;
   net::ISocket *getNewClient(void);
   bool succeedBind() const;
+  ~Listener();
+  bool shouldExist() const;
+  void setExistance(bool b);
 
 private:
   bool initTCP(int port);
@@ -28,6 +31,7 @@ private:
   net::ISocket *_socket;
   int		_port;
   bool		_good;
+  bool		_exist;
 };
 
 #endif

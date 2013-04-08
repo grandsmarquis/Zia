@@ -33,4 +33,5 @@ int Response::getLength() const
 
 void Response::assemble()
 {
+  
 }

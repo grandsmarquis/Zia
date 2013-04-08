@@ -161,9 +161,9 @@ namespace net
 
   void	WindowsThreadSafeSocket::Close()
   {
-    _mutex.MutexLock();
+    //    _mutex.MutexLock();
     _innerSocket->Close();
-    _mutex.MutexUnlock();
+    //    _mutex.MutexUnlock();
   }
 
   void	WindowsThreadSafeSocket::SetRemoteEndPoint(EndPoint const& other)

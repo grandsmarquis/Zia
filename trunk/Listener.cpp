@@ -1,7 +1,7 @@
 #include "Listener.hpp"
 
 Listener::Listener(int port)
-  :_port(port)
+  :_port(port), _exist(true)
 {
   this->initTCP(port);
 }
@@ -41,4 +41,20 @@ net::ISocket *Listener::getNewClient(void)
 bool Listener::succeedBind() const
 {
   return (_good);
+}
+
+Listener::~Listener()
+{
+  _socket->Close();
+  delete(_socket);
+}
+
+void Listener::setExistance(bool b)
+{
+  _exist = b;
+}
+
+bool Listener::shouldExist() const
+{
+  return (_exist);
 }

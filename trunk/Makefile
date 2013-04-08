@@ -3,8 +3,10 @@ NAME=		Zia
 
 SRC= 		main.cpp			\
 		Listener.cpp			\
-		Daemon.cpp			\
+		ModuleContainer.cpp		\
+		ModuleContainerList.cpp		\
 		DaemonManager.cpp		\
+		Daemon.cpp			\
 		Bucket.cpp			\
 		HTTPParser.cpp			\
 		mutex/MutexCross.cpp		\
