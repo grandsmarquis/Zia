@@ -19,6 +19,7 @@ private:
   std::list<int> _ports;
 
   void parse(const libconfig::Setting &root);
+  void setDefaults(void);
 };
 
 #endif

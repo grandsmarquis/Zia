@@ -16,6 +16,20 @@ void DaemonManager::addPort(int port)
     }
 }
 
+void DaemonManager::addModule(std::string const &name)
+{
+  EmbededObjectFactory objectFactory("../modules/");
+
+  ModuleInfos *moduleInfos = objectFactory.getModuleInfos(name);
+  Directives *moduleDirectives = objectFactory.getModuleDirectives(name);
+
+  if (!moduleInfos || !moduleDirectives)
+    std::cerr << "Unable to load module : " << name << "." << std::endl;
+
+  //Check error and add to map
+
+}
+
 void DaemonManager::removePort(int port)
 {
   if (isListeningOn(port))
@@ -44,17 +58,30 @@ void DaemonManager::update()
 
     if (tmp)
       _dList.push_front(new Daemon(tmp, iter->first));
-
   }
 }
 
 void DaemonManager::loadConf(ConfigManager const &cfg)
 {
   std::list<int>::const_iterator iter;
-  
-  
+  std::list<std::string>::const_iterator citer;
+    
   for (iter = cfg.getPorts().begin(); iter != cfg.getPorts().end(); ++iter)
     {
       this->addPort(*iter);
     }
+  for (citer = cfg.getModules().begin(); citer != cfg.getModules().end(); ++citer)
+    {
+      this->addModule(*citer);
+    }
+}
+
+std::map<ModuleInfos *, Directives *> const &DaemonManager::getModules() const
+{
+  return (_mList);
+}
+
+int DaemonManager::getNbModules() const
+{
+  return (_mList.size());
 }

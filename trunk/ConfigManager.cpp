@@ -21,6 +21,7 @@ ConfigManager::ConfigManager(std::string const &name)
       return;
     }
   parse(cfg.getRoot());
+  setDefaults();
 }
 
 void ConfigManager::parse(const libconfig::Setting &root)
@@ -67,4 +68,20 @@ std::list<std::string> const &ConfigManager::getModules(void) const
 std::list<int> const &ConfigManager::getPorts(void) const
 {
   return (_ports);
+}
+
+
+void ConfigManager::setDefaults(void)
+{
+  if (_ports.empty())
+    {
+      std::cerr << "No ports set after reading config. Setting defaults to 80 and 3030." << std::endl;
+      _ports.push_front(80);
+      _ports.push_front(3030);
+    }
+  if (_modules.empty())
+    {
+      std::cerr << "No modules set after reading config. Setting defaults to php and ssl." << std::endl;
+      _modules.push_front("php");
+    }
 }
