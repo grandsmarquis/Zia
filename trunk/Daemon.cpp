@@ -65,7 +65,9 @@ void Daemon::work()
 	  std::list<Request *>::iterator iter;
 	  for (iter = _reqs.begin(); iter != _reqs.end(); ++iter)
 	    {
+	      (*iter)->separate();
 	      Response resp(NULL, 0);
+	      std::cout << (*iter)->getHeader().getArg() << " " << _modules << std::endl;
 	      call(PREPROCESS_REQUEST, *(*iter), resp);
 	    }
 	}
