@@ -18,12 +18,14 @@ int main()
   ModuleInfos * moduleInfos = get_module_infos();
   Directives * moduleDirectives = get_directives();
 
-  std::cout << moduleInfos->associatedDLL << std::endl;
-  std::cout << moduleInfos->name << std::endl;
+  // std::cout << moduleInfos->associatedDLL << std::endl;
+  // std::cout << moduleInfos->name << std::endl;
 
+  Request request(NULL, 0);
+  Response response(NULL, 0);
 
   moduleDirectives->init();
-  // moduleDirectives->callDirective(CREATE_RESPONSE, request, response);
+  moduleDirectives->callDirective(CREATE_RESPONSE, request, response);
 
   delete moduleDirectives;
   delete moduleInfos;
