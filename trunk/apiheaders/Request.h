@@ -8,8 +8,8 @@ class Request {
   private:
     char *_buffer;
     int _bufferLength;
-    RequestHeader _header;
     Body _body;
+    RequestHeader _header;
 
   public:
     Request (char *buffer, int bufferLength);
