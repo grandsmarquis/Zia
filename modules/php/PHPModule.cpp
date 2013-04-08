@@ -41,15 +41,16 @@ PHPModule::PHPModule()
 
 PHPModule::~PHPModule()
 {
+  std::cout << "DESTRUCT" << std::endl;
 }
 
 void PHPModule::init()
 {
+  std::cout << "INIIIIIT" << std::endl;
 }
 
 void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
 {
-  std::cout << "klsefjklsdjhfjklsldfhjsdhjfsdjhkjhkfsdjhkfsdsdf" << std::endl;
   std::map<std::string, std::string> env;
 
   env["DOCUMENT_ROOT"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";

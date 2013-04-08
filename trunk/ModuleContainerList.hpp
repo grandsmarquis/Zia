@@ -9,11 +9,15 @@
 class ModuleContainerList
 {
 public:
-  ModuleContainerList(std::string const &name, std::list<std::string> const &mlist);
-
-  std::list<ModuleContainer *> _list;
+  ModuleContainerList(std::string const &path, std::list<std::string> const &mlist);
+  EmbededObjectFactory const &getFactory() const;
+  std::string const &getPath() const;
+  ~ModuleContainerList();
+  std::list<ModuleContainer *> const &getList() const;
 private:
-
+  std::string _path;
+  EmbededObjectFactory _factory;
+  std::list<ModuleContainer *> _list;
 };
 
 

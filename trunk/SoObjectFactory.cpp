@@ -14,15 +14,16 @@ SoObjectFactory::SoObjectFactory() {
 
 SoObjectFactory::~SoObjectFactory() {
   std::map<std::string, void *>::iterator it = this->_map.begin();
-  while (it != this->_map.end()) {
-    dlclose(it->second);
-    ++it;
-  }
+  // while (it != this->_map.end()) {
+  //   dlclose(it->second);
+  //   ++it;
+  // }
 }
 
 void *SoObjectFactory::loadLibrary(std::string const & library) {
   void *lib;
 
+  std::cout << library << std::endl;
   if (!(lib = this->_map[library])) {
     lib = dlopen((library + ".so").c_str(), RTLD_LAZY | RTLD_LOCAL);
     if (lib == NULL) {

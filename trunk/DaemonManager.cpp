@@ -48,7 +48,9 @@ void DaemonManager::update()
       {
 	tmp = iter->second->getNewClient();
 	if (tmp)
-	  _dList.push_front(new Daemon(this, tmp, iter->first, _modules));
+	  {
+	    _dList.push_front(new Daemon(this, tmp, iter->first, _modules));
+	  }
       }
   }
 }
@@ -67,28 +69,28 @@ void DaemonManager::loadConf(ConfigManager const &cfg)
       else
 	this->addPort(*iter);
     }
-  if (_modules)
-    delete(_modules);
+  // if (_modules)
+  //   delete(_modules);
   _modules = new ModuleContainerList(cfg.getModulePath(), cfg.getModules());
 }
 
 void DaemonManager::unloadConf(void)
 {
-  std::map<int, Listener *>::const_iterator iter;
+  // std::map<int, Listener *>::const_iterator iter;
 
-  for (iter = _port.begin(); iter != _port.end(); ++iter)
-    {
-      iter->second->setExistance(false);
-    }
+  // for (iter = _port.begin(); iter != _port.end(); ++iter)
+  //   {
+  //     iter->second->setExistance(false);
+  //   }
 }
 
 void DaemonManager::breakDaemons(void)
 {
-  std::list<Daemon *>::iterator iter;
+  // std::list<Daemon *>::iterator iter;
     
-  for (iter = _dList.begin(); iter != _dList.end(); ++iter)
-    {
-      (*iter)->stop();
-      delete(*iter);
-    } 
+  // for (iter = _dList.begin(); iter != _dList.end(); ++iter)
+  //   {
+  //     (*iter)->stop();
+  //     delete(*iter);
+  //   } 
 }

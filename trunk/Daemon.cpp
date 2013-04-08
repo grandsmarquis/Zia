@@ -37,20 +37,22 @@ void Daemon::ReceiveAll()
   std::string ss;
   char buffer[254];
   int rec;
+  bool end;
   
   rec =_socket->Recieve(buffer, 254);
   if (rec > 0)
     {
       this->_b.pushData(buffer, rec);
-   }
-  else
+    }
+  if (rec <= 0 || this->_b.canCut())
+    {
+      char *data = _b.getData();
+      Request *req = new Request(data, _b.getSize());
+      _reqs.push_front(req);
+    }
+  if (rec <= 0)
     {
       this->_running = false;
-      if (!_b.isEmpty())
-	{
-	  Request *req = new Request(_b.getData(), _b.getSize());
-	  _reqs.push_front(req);
-	}
     }
 }
 
@@ -67,8 +69,9 @@ void Daemon::work()
 	    {
 	      (*iter)->separate();
 	      Response resp(NULL, 0);
-	      std::cout << (*iter)->getHeader().getArg() << " " << _modules << std::endl;
+	      std::cout << "BEFORE" << std::endl;
 	      call(PREPROCESS_REQUEST, *(*iter), resp);
+	      std::cout << "AFTER" << std::endl;
 	    }
 	}
     }
@@ -88,10 +91,11 @@ void Daemon::stop()
 
 void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp)
 {
-  std::list<ModuleContainer *>::iterator iter;
+  std::list<ModuleContainer *>::const_iterator iter;
 
-  for (iter = _modules->_list.begin(); iter != _modules->_list.end(); ++iter)
+  for (iter = _modules->getList().begin(); iter != _modules->getList().end(); ++iter)
     {
-      (*iter)->_directives->callDirective(directiveorder, req, resp);
+      //      (*iter)->_directives->callDirective(directiveorder, req, resp);
+      (*iter)->_directives->init();
     }
 }
