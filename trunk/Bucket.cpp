@@ -15,13 +15,13 @@ bool Bucket::pushData(char *data, int size)
 
 char *Bucket::getData()
 {
-  std::string str3 = _str.substr(_str.find("\r\n"));
-  char * writable = new char[str3.size() + 1];
-  std::copy(_str.begin(), str3.end(), writable);
-  writable[str3.size()] = '\0';
-  _str.erase(0, str3.size());
-  _size = str3.size();
-  return (writable);
+  unsigned int l = _str.find("\r\n");
+  char *ret = new char[l+1];
+  std::copy(_str.begin(), _str.begin() + l, ret);
+  ret[l] = '\0';
+  _size = l;
+  _str.erase(_str.begin(), _str.begin() + l);
+  return (ret);
 }
 
 bool Bucket::canCut() const

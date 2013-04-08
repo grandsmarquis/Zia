@@ -5,7 +5,6 @@
 Request::Request(char *buffer, int bufferLength)
   : _buffer(NULL), _bufferLength(0), _body(buffer, bufferLength)
 {
-  // std::cout << buffer << std::endl;
 }
 
 Request::~Request()
@@ -49,8 +48,6 @@ void Request::separate()
     _header.setCommand(parser.getCmd());
     _header.setArg(parser.getArg());
     _header.setVersion(parser.getVersion());
-
-    // std::cout << "PARSED :: " << parser.getCmd() << " :: " << parser.getArg() << std::endl;
     for (std::map<std::string, std::string>::const_iterator it = parser.getMap().begin(); it != parser.getMap().end(); ++it)
     {
       _header.setValue(it->first, it->second);

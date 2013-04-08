@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <queue>
 
 #include "ISocket.hh"
 #include "IThread.hpp"
@@ -38,7 +39,7 @@ private:
   bool			_running;
   Bucket		_b;
   DaemonManager		*_man;
-  std::list<Request *>	_reqs;
+  std::queue<Request *>	_reqs;
   ModuleContainerList	*_modules;
 
   void ReceiveAll();

@@ -9,7 +9,6 @@
 #endif
 {
   Daemon*   daemon;
-
   daemon = reinterpret_cast<Daemon*>(param);
   daemon->work();
 #ifdef __unix__
@@ -37,18 +36,17 @@ void Daemon::ReceiveAll()
   std::string ss;
   char buffer[254];
   int rec;
-  bool end;
   
   rec =_socket->Recieve(buffer, 254);
   if (rec > 0)
     {
       this->_b.pushData(buffer, rec);
     }
-  if (rec <= 0 || this->_b.canCut())
+  if (this->_b.canCut())
     {
       char *data = _b.getData();
       Request *req = new Request(data, _b.getSize());
-      _reqs.push_front(req);
+      _reqs.push(req);
     }
   if (rec <= 0)
     {
@@ -62,17 +60,16 @@ void Daemon::work()
   while (this->_running)
     {
       this->ReceiveAll();
-      if (!_reqs.empty())
+      Request *tmp;
+      while (!_reqs.empty())
 	{
-	  std::list<Request *>::iterator iter;
-	  for (iter = _reqs.begin(); iter != _reqs.end(); ++iter)
-	    {
-	      (*iter)->separate();
-	      Response resp(NULL, 0);
-	      std::cout << "BEFORE" << std::endl;
-	      call(PREPROCESS_REQUEST, *(*iter), resp);
-	      std::cout << "AFTER" << std::endl;
-	    }
+	  tmp = _reqs.front();
+	  tmp->separate();
+	  Response resp(NULL, 0);
+	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << std::endl;
+	  call(PREPROCESS_REQUEST, *(tmp), resp);
+	  std::cout << "AFTER" << std::endl;
+	  _reqs.pop();
 	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
