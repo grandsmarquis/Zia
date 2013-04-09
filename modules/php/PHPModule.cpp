@@ -11,11 +11,17 @@
 
 #include <boost/filesystem.hpp>
 
-#include "../../trunk/apiheaders/ModuleInfos.h"
-#include "../../trunk/apiheaders/Directives.h"
-#include "../../trunk/apiheaders/DirectivesOrder.h"
+#include "ModuleInfos.h"
+#include "Directives.h"
+#include "DirectivesOrder.h"
+
+#include "ResponseHeader.h"
+
+#include "HTTPParser.hpp"
 
 #include "PHPModule.hpp"
+
+#define EOL "\r\n"
 
 extern "C"
 {
@@ -49,23 +55,33 @@ void PHPModule::init()
 {
 }
 
-void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
+const char ** PHPModule::buildEnv(RequestHeader & requestHeader) const
 {
-  RequestHeader requestHeader = request.getHeader();
+  std::map<std::string, std::string> env;
+  std::string
+    script,
+    query,
+    uri = requestHeader.getArg(),
+    pathInfo = boost::filesystem::current_path().native(),
+    scriptFileName(pathInfo),
+    path = getenv("PATH");
+  size_t
+    pos = uri.find_first_of('?'),
+    size = uri.size();
+  const char **e = new const char*[env.size() + 1];
+  int i = 0;
+  std::map<std::string, std::string>::iterator it;
 
-  // std::cout << requestHeader.getVersion() << std::endl;
-
-  std::string script, query, uri = requestHeader.getArg(), pathInfo = boost::filesystem::current_path().native(), path = getenv("PATH");
-  size_t pos = uri.find_first_of('?');
 
   if (pos == std::string::npos) {
     script = uri;
   } else {
-    script = uri.substr(0, pos);
-    query = uri.substr(pos + 1);
+    script.append(uri.substr(0, pos).c_str(), pos);
+    if (size && pos < size)
+      query.append(uri.substr(pos + 1).c_str(), size - pos);
   }
 
-  std::map<std::string, std::string> env;
+  scriptFileName += script;
 
   env["DOCUMENT_ROOT"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
   env["GATEWAY_INTERFACE"] = "CGI/1.1";
@@ -96,12 +112,14 @@ void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request,
   // env["PATHEXT"] = ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC";
   env["PATH_INFO"] = pathInfo;
   env["PATH_TRANSLATED"] = pathInfo;
-  env["QUERY_STRING"] = query;
+  // env["QUERY_STRING"] = query;
+
   // env["REMOTE_ADDR"] = "127.0.0.1";
   // env["REMOTE_PORT"] = "63555";
-  env["REQUEST_METHOD"] = requestHeader.getCommand();
-  env["REQUEST_URI"] = requestHeader.getArg();
-  env["SCRIPT_FILENAME"] = pathInfo + "/"  + script;
+  // env["REQUEST_METHOD"] = requestHeader.getCommand();
+  // env["REQUEST_URI"] = requestHeader.getArg();
+
+  env["SCRIPT_FILENAME"] = scriptFileName;
   env["SCRIPT_NAME"] = script;
 
   env["SERVER_ADDR"] = "127.0.0.1";
@@ -115,26 +133,24 @@ void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request,
   env["SYSTEMROOT"] = "/";
   env["REDIRECT_STATUS"] = "true";
 
-  const char **e = new const char*[env.size() + 1];
-  int i = 0;
+  e = new const char*[env.size() + 1];
 
-  std::map<std::string, std::string>::iterator it;
   for (it = env.begin(); it != env.end(); ++it) {
     std::string s(it->first + "=" + it->second);
     int size = s.size();
     char *buff  = new char[size + 1];
     s.copy(buff, size);
-    s[size] = 0;
+    buff[size] = 0;
     e[i] = buff;
     ++i;
   }
   e[i] = NULL;
-  char *argv[] = {
-    NULL
-  };
+  return e;
+}
 
+void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
+{
   pid_t pid;
-
   int pipe_fds[2];
 
   pipe(pipe_fds);
@@ -144,16 +160,24 @@ void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request,
     std::cerr << "unable to fork" << std::endl;
   } else {
     if (pid == 0) {
+      std::string bin("/usr/bin/php-cgi");
+      const char *argv[] = {
+        bin.c_str(),
+        NULL
+      };
+
+      const char **env = this->buildEnv(request.getHeader());
 
       close(pipe_fds[0]);
       dup2(pipe_fds[1], 1);
-      std::cout << execve("/usr/bin/php-cgi", argv, const_cast<char * const*> (e)) << std::endl;
+      execve(bin.c_str(), const_cast<char * const*> (argv), const_cast<char * const*> (env));
       exit(1);
     } else {
       close(pipe_fds[1]);
 
       waitpid(pid, NULL, 0);
 
+      ResponseHeader & responseHeader = response.getHeader();
       char buff[128];
       std::string bdy;
       int size;
@@ -166,12 +190,58 @@ void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request,
         std::cout << "unbale to read" << std::endl;
       }
 
-      Body body = response.getBody();
-      char *tmp;
-      size = bdy.size();
-      tmp = new char[bdy.size()];
-      bdy.copy(tmp, size);
-      body.setBody(tmp, size);
+      std::string header;
+      std::string phpBody;
+
+      size_t pos, last_pos;
+
+      pos = bdy.find(EOL EOL);
+
+      header = bdy.substr(0, pos);
+      if (pos != std::string::npos) {
+        phpBody = bdy.substr(pos + 4);
+
+        Body & body = response.getBody();
+        char *tmp;
+        size = phpBody.size();
+
+        tmp = new char[size];
+        phpBody.copy(tmp, size);
+        body.setBody(tmp, size);
+      }
+
+      last_pos = pos = 0;
+      size_t line_pos;
+
+      do{
+        pos = header.find(EOL, last_pos);
+        std::string line = header.substr(last_pos, pos - last_pos);
+
+        line_pos = line.find(": ");
+        std::string key(line.substr(0, line_pos));
+        std::string value(line.substr(line_pos + 2));
+
+        if (key == "Status") {
+          size_t pos;
+
+          pos = value.find_first_of(' ');
+          responseHeader.setStatusCode(value.substr(0, pos));
+          responseHeader.setStatusMessage(value.substr(pos + 1));
+        } else {
+          responseHeader.setValue(key, value);
+        }
+
+        last_pos = pos + 2;
+      } while (std::string::npos != pos);
+
+      if (responseHeader.getStatusCode().empty()) {
+        responseHeader.setStatusCode("200");
+        responseHeader.setStatusMessage("OK");
+      }
+
+      responseHeader.setVersion(request.getHeader().getVersion());
+
+      response.assemble();
     }
   }
 }

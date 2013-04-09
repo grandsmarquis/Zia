@@ -12,6 +12,7 @@
 class PHPModule : public Directives
 {
   private:
+    const char ** buildEnv(RequestHeader & requestHeader) const;
 
   public:
     PHPModule();
