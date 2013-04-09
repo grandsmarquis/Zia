@@ -1,9 +1,9 @@
 #include "DaemonManager.hpp"
 
 DaemonManager::DaemonManager()
-  :_loaded(false)
+  :_loaded(false), _daemon(NULL)
 {
-  
+
 }
 
 void DaemonManager::addPort(int port)
@@ -55,10 +55,50 @@ void DaemonManager::update()
 	tmp = iter->second->getNewClient();
 	if (tmp)
 	  {
-	    _dList.push_front(new Daemon(this, tmp, iter->first, _modules));
+	    if ((iter->first) == _dPort)
+	      {
+		std::cout << "Daemon connected!" << std::endl;
+		if (_daemon)
+		  {
+		    std::cout << "Can just take one Daemon" << std::endl;
+		    delete(tmp);
+		  }
+		else
+		  {
+		    _daemon = tmp;
+		  }
+	      }
+	    else
+	      {
+		_dList.push_front(new Daemon(this, tmp, iter->first, _modules));
+	      }
 	  }
       }
   }
+  dealDaemon();
+}
+
+void DaemonManager::dealDaemon(void)
+{
+  char buffer[254];
+  int rec;
+
+  if (_daemon)
+    {
+      rec = _daemon->Recieve(buffer, 253);
+      if (rec > 0)
+	{
+	  buffer[rec] = NULL;
+	  std::cout << "Will load new conf : " << buffer << "." << std::endl;
+ 	  ConfigManager config(buffer);
+	  loadConf(config);
+	}
+      else
+	{
+	  delete (_daemon);
+	  _daemon = NULL;
+	}
+    }  
 }
 
 void DaemonManager::loadConf(ConfigManager const &cfg)
@@ -79,6 +119,7 @@ void DaemonManager::loadConf(ConfigManager const &cfg)
     }
   _modules = new ModuleContainerList(cfg.getModulePath(), cfg.getModules());
   _modules->attach();
+  _dPort = cfg.getDPort();
   _loaded = true;
 }
 
