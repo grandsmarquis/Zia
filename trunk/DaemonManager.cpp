@@ -59,8 +59,6 @@ void DaemonManager::update()
 	  }
       }
   }
-  ConfigManager config("../default.cfg");
-  loadConf(config);
 }
 
 void DaemonManager::loadConf(ConfigManager const &cfg)
