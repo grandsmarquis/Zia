@@ -3,6 +3,11 @@
 
 #include <list>
 #include <string>
+#ifdef __unix__
+#include"MutexUnix.hpp"
+#elif defined _WIN32
+#include"MutexCSWindows.hpp"
+#endif
 
 #include "ModuleContainer.hpp"
 
@@ -14,10 +19,17 @@ public:
   std::string const &getPath() const;
   ~ModuleContainerList();
   std::list<ModuleContainer *> const &getList() const;
+  void attach();
+  void detach();
+  bool isAttached() const;
+
 private:
-  std::string _path;
+  std::string		_path;
   EmbededObjectFactory _factory;
   std::list<ModuleContainer *> _list;
+  int			_att;
+  IMutex		*_mutex;
+
 };
 
 

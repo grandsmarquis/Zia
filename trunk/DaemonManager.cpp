@@ -1,5 +1,11 @@
 #include "DaemonManager.hpp"
 
+DaemonManager::DaemonManager()
+  :_loaded(false)
+{
+  
+}
+
 void DaemonManager::addPort(int port)
 {
   Listener *tmp;
@@ -18,7 +24,7 @@ void DaemonManager::addPort(int port)
 
 void DaemonManager::addModule(std::string const &name)
 {
-
+  (void) name;
 }
 
 void DaemonManager::removePort(int port)
@@ -53,13 +59,17 @@ void DaemonManager::update()
 	  }
       }
   }
+  ConfigManager config("../default.cfg");
+  loadConf(config);
 }
 
 void DaemonManager::loadConf(ConfigManager const &cfg)
 {
+  
   std::list<int>::const_iterator iter;
 
-  unloadConf();    
+  if (_loaded)
+    unloadConf();
   for (iter = cfg.getPorts().begin(); iter != cfg.getPorts().end(); ++iter)
     {
       if (this->isListeningOn(*iter))
@@ -69,28 +79,29 @@ void DaemonManager::loadConf(ConfigManager const &cfg)
       else
 	this->addPort(*iter);
     }
-  // if (_modules)
-  //   delete(_modules);
   _modules = new ModuleContainerList(cfg.getModulePath(), cfg.getModules());
+  _modules->attach();
+  _loaded = true;
 }
 
 void DaemonManager::unloadConf(void)
 {
-  // std::map<int, Listener *>::const_iterator iter;
+  std::map<int, Listener *>::iterator iter;
 
-  // for (iter = _port.begin(); iter != _port.end(); ++iter)
-  //   {
-  //     iter->second->setExistance(false);
-  //   }
+  for (iter = _port.begin(); iter != _port.end(); ++iter)
+    {
+      iter->second->setExistance(false);
+    }
+  _modules->detach();
+  if (!_modules->isAttached())
+    delete(_modules);
 }
 
 void DaemonManager::breakDaemons(void)
 {
-  // std::list<Daemon *>::iterator iter;
-    
-  // for (iter = _dList.begin(); iter != _dList.end(); ++iter)
-  //   {
-  //     (*iter)->stop();
-  //     delete(*iter);
-  //   } 
+
+}
+
+DaemonManager::~DaemonManager()
+{
 }

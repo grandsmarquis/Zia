@@ -26,12 +26,14 @@ public:
   void addModule(std::string const &name);
   void unloadConf(void);
   void breakDaemons(void);
+  ~DaemonManager();
+  DaemonManager();
 
 private:
   std::list<Daemon *>		_dList;
   std::map<int, Listener *>	_port;
   ModuleContainerList		*_modules;
-
+  bool _loaded;
 };
 
 #endif

@@ -31,6 +31,7 @@ public:
   bool isRunning() const;
   void stop();
   void call(DirectivesOrder directiveorder, Request &req, Response &resp);
+  ~Daemon();
 
 private:
   net::ISocket		*_socket;

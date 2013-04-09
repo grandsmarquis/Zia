@@ -23,6 +23,7 @@
 Daemon::Daemon(DaemonManager *manager, net::ISocket *socket, int port, ModuleContainerList *list)
   : _socket(socket), _port(port), _running(true), _man(manager), _modules(list)
 {
+  _modules->attach();
 #ifdef __unix__
   this->_thread = new ThreadUnix();
 #elif defined _WIN32
@@ -73,6 +74,9 @@ void Daemon::work()
 	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
+  _modules->detach();
+  if (!_modules->isAttached())
+    delete(_modules);
 }
 
 bool Daemon::isRunning() const
@@ -95,4 +99,9 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp)
       //      (*iter)->_directives->callDirective(directiveorder, req, resp);
       (*iter)->_directives->init();
     }
+}
+
+Daemon::~Daemon()
+{
+
 }
