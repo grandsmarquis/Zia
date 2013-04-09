@@ -12,16 +12,17 @@ ConfigManager::ConfigManager(std::string const &name)
   catch(const libconfig::FileIOException &fioex)
     {
       std::cerr << "I/O error while reading file." << std::endl;
+      setDefaults();
       return;
     }
   catch(const libconfig::ParseException &pex)
     {
       std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine()
 		<< " - " << pex.getError() << std::endl;
+      setDefaults();
       return;
     }
   parse(cfg.getRoot());
-  setDefaults();
 }
 
 void ConfigManager::parse(const libconfig::Setting &root)
@@ -74,6 +75,14 @@ void ConfigManager::parse(const libconfig::Setting &root)
 	  _author += author.c_str();
 	}
     }
+  if (root.exists("daemonPort"))
+    {
+      const libconfig::Setting &daemon = root["daemonPort"];
+      if (daemon.isNumber())
+	{
+	  _dPort= daemon;
+	}
+    }
 
 }
 
@@ -107,7 +116,17 @@ void ConfigManager::setDefaults(void)
     }
   if (_modules.empty())
     {
-      std::cerr << "No modules set after reading config. Setting defaults to php and ssl." << std::endl;
-      _modules.push_front("php");
+      std::cerr << "No modules set after reading config. Setting defaults to ../modules/php/php." << std::endl;
+      _modules.push_front("../modules/php/php");
     }
+  if (_dPort <= 0)
+    {
+      std::cerr << "No daemon ports were set, detting 2021 by default." << std::endl;
+      _dPort = 2021;
+    }
+}
+
+int ConfigManager::getDPort(void) const
+{
+  return (_dPort);
 }

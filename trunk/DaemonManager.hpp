@@ -34,6 +34,10 @@ private:
   std::map<int, Listener *>	_port;
   ModuleContainerList		*_modules;
   bool _loaded;
+  int _dPort;
+  net::ISocket *_daemon;
+
+  void dealDaemon(void);
 };
 
 #endif
