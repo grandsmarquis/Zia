@@ -4,7 +4,7 @@ SRC =	PHPModule.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
-CXXFLAGS = -W -Wall -fPIC -I ../trunk -I ../trunk/apiheaders
+CXXFLAGS = -W -Wall -fPIC -I ../../trunk -I ../../trunk/apiheaders
 LDFLAGS = -shared -fPIC -lboost_system -lboost_filesystem
 
 $(NAME): $(OBJ)
