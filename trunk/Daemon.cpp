@@ -57,6 +57,10 @@ void Daemon::ReceiveAll()
 
 void Daemon::work()
 {
+  Request trash(NULL, 0);
+  Response trash2(NULL, 0);
+
+  call(CONNECTION_INIT, trash, trash2);
   std::cout << "CONNECTION_INIT" << std::endl;
   while (this->_running)
     {
@@ -67,13 +71,21 @@ void Daemon::work()
 	  tmp = _reqs.front();
 	  tmp->separate();
 	  Response resp(NULL, 0);
-	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << std::endl;
+	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << " :: " <<  tmp->getHeader().getArg()<< std::endl;
 	  call(PREPROCESS_REQUEST, *(tmp), resp);
+	  call(PROCESS_REQUEST, *(tmp), resp);
+	  call(CREATE_RESPONSE, *(tmp), resp);
+	  call(PROCESS_FINISHED_RESPONSE, *(tmp), resp);
+	  call(PRESENDING_PROCESSING, *(tmp), resp);
 	  std::cout << "AFTER" << std::endl;
+	  if (resp.getLength())
+	    _socket->Send(resp.getBuffer(), resp.getLength());
 	  _reqs.pop();
+	  _running = false;
 	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
+  call(CONNECTION_CLOSED, trash, trash2);
   _modules->detach();
   if (!_modules->isAttached())
     delete(_modules);
@@ -96,8 +108,19 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp)
 
   for (iter = _modules->getList().begin(); iter != _modules->getList().end(); ++iter)
     {
-      //      (*iter)->_directives->callDirective(directiveorder, req, resp);
-      (*iter)->_directives->init();
+      if ((*iter)->_infos->managedDirectives & directiveorder)
+	{
+	  if ((*iter)->_infos->name == "php")
+	    {
+	      if (std::string::npos != req.getHeader().getArg().find(".php"))
+		{
+		  std::cout << "calling PHP" << std::endl;
+		  (*iter)->_directives->callDirective(directiveorder, req, resp);
+		}
+	    }
+	  else
+	    (*iter)->_directives->callDirective(directiveorder, req, resp);
+	}
     }
 }
 

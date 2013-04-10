@@ -83,9 +83,11 @@ const char ** PHPModule::buildEnv(RequestHeader & requestHeader) const
 
   scriptFileName += script;
 
-  env["DOCUMENT_ROOT"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
+  //  env["DOCUMENT_ROOT"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
+  env["DOCUMENT_ROOT"] = "/home/jdourlens/Documents/Zia/modules/php";
   env["GATEWAY_INTERFACE"] = "CGI/1.1";
-  env["HOME"] = "/home/SYSTEM";
+  //  env["HOME"] = "/home/SYSTEM";
+  env["HOME"] = "/home/jdourlens";
 
   if (requestHeader.hasKey("Accept"))
     env["HTTP_ACCEPT"] = requestHeader.getValueForKey("Accept");
