@@ -1,6 +1,9 @@
 #ifndef __RESPONSE_H__
 #define __RESPONSE_H__
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "ResponseHeader.h"
 #include "Body.h"
 

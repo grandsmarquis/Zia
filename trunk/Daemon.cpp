@@ -79,7 +79,10 @@ void Daemon::work()
 	  call(PRESENDING_PROCESSING, *(tmp), resp);
 	  std::cout << "AFTER" << std::endl;
 	  if (resp.getLength())
-	    _socket->Send(resp.getBuffer(), resp.getLength());
+	    {
+	      _socket->Send(resp.getBuffer(), resp.getLength());
+	      _socket->Send("\r\n\r\n", 4);
+	    }
 	  _reqs.pop();
 	  _running = false;
 	}

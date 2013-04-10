@@ -1,4 +1,6 @@
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <map>
 #include <string>
@@ -55,6 +57,9 @@ void Response::assemble()
   for (it = options.begin(); it != options.end(); ++it) {
     out.append(it->first).append(": ").append(it->second).append(EOL);
   }
+  char str[10];
+  snprintf(str, 10, "%d", _body.getBodyLength() - 1);
+  out.append("Content-Length").append(": ").append(str).append(EOL);
   out.append(EOL).append(_body.getBody(), _body.getBodyLength());
 
   size_t size = out.size();
