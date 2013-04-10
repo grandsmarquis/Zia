@@ -60,8 +60,7 @@ void Daemon::work()
   Request trash(NULL, 0);
   Response trash2(NULL, 0);
   sockaddr_in sock;
-  t_socket sockint = 1;
-  
+  t_socket sockint = _socket->getFD();
 
   call(CONNECTION_INIT, trash, trash2, sockint, sock);
   std::cout << "CONNECTION_INIT" << std::endl;
@@ -74,7 +73,7 @@ void Daemon::work()
 	  tmp = _reqs.front();
 	  tmp->separate();
 	  Response resp(NULL, 0);
-	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << " :: " <<  tmp->getHeader().getArg()<< std::endl;
+	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << " :: " <<  tmp->getHeader().getArg() << " :: on socket -> " << sockint << std::endl;
 	  call(PREPROCESS_REQUEST, *(tmp), resp, sockint, sock);
 	  call(PROCESS_REQUEST, *(tmp), resp, sockint, sock);
 	  call(CREATE_RESPONSE, *(tmp), resp, sockint, sock);
@@ -84,7 +83,7 @@ void Daemon::work()
 	  if (resp.getLength())
 	    {
 	      _socket->Send(resp.getBuffer(), resp.getLength());
-	      _socket->Send("\r\n\r\n", 4);
+	      //	      _socket->Send("\r\n\r\n", 4);
 	    }
 	  _reqs.pop();
 	  _running = false;
