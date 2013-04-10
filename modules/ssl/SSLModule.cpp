@@ -60,7 +60,7 @@ void SSLModule::init()
 
 }
 
-void SSLModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
+void SSLModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos)
 {
 
 }

@@ -30,7 +30,7 @@ public:
   void work(void);
   bool isRunning() const;
   void stop();
-  void call(DirectivesOrder directiveorder, Request &req, Response &resp);
+  void call(DirectivesOrder directiveorder, Request &req, Response &resp, t_socket socket, sockaddr_in connexionInfos);
   ~Daemon();
 
 private:

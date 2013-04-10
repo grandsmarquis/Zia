@@ -90,7 +90,7 @@ std::string File::_getContentType(std::string const & path) {
   return "text/plain";
 }
 
-void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
+void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos)
 {
   // RequestHeader requestHeader = request.getHeader();
   // ResponseHeader responseHeader = response.getHeader();
