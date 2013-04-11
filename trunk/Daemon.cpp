@@ -21,9 +21,16 @@
 
 
 Daemon::Daemon(DaemonManager *manager, net::ISocket *socket, int port, ModuleContainerList *list)
-  : _socket(socket), _port(port), _running(true), _man(manager), _modules(list)
+  : _socket(socket), _port(port), _running(true), _man(manager), _modules(list),
+#ifdef __unix__
+    _mutex(new MutexUnix())
+#elif defined _WIN32
+    _mutex(new MutexCSWindows())
+#endif
+
 {
   _modules->attach();
+  _mutex->MutexInit();
 #ifdef __unix__
   this->_thread = new ThreadUnix();
 #elif defined _WIN32
@@ -51,7 +58,7 @@ void Daemon::ReceiveAll()
     }
   if (rec <= 0)
     {
-      this->_running = false;
+      setRunning(false);
     }
 }
 
@@ -64,7 +71,7 @@ void Daemon::work()
 
   call(CONNECTION_INIT, trash, trash2, sockint, sock);
   std::cout << "CONNECTION_INIT" << std::endl;
-  while (this->_running)
+  while (isRunning())
     {
       this->ReceiveAll();
       Request *tmp;
@@ -79,14 +86,10 @@ void Daemon::work()
 	  call(CREATE_RESPONSE, *(tmp), resp, sockint, sock);
 	  call(PROCESS_FINISHED_RESPONSE, *(tmp), resp, sockint, sock);
 	  call(PRESENDING_PROCESSING, *(tmp), resp, sockint, sock);
-	  std::cout << "AFTER" << std::endl;
 	  if (resp.getLength())
-	    {
-	      _socket->Send(resp.getBuffer(), resp.getLength());
-	      //	      _socket->Send("\r\n\r\n", 4);
-	    }
+	    _socket->Send(resp.getBuffer(), resp.getLength());
 	  _reqs.pop();
-	  _running = false;
+	  setRunning(false);
 	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
@@ -94,16 +97,29 @@ void Daemon::work()
   _modules->detach();
   if (!_modules->isAttached())
     delete(_modules);
+  _socket->Close();
+  delete(_socket);
+
+}
+
+void Daemon::setRunning(bool r)
+{
+  _mutex->MutexLock();
+  _running = r;
+  _mutex->MutexUnlock();
 }
 
 bool Daemon::isRunning() const
 {
-  return (this->_running);
+  _mutex->MutexLock();
+  bool tmp = _running;
+  _mutex->MutexUnlock();
+  return (tmp);
 }
 
 void Daemon::stop()
 {
-  this->_running = false;
+  setRunning(false);
   this->_thread->thread_cancel();
 }
 

@@ -71,11 +71,31 @@ void DaemonManager::update()
 	    else
 	      {
 		_dList.push_front(new Daemon(this, tmp, iter->first, _modules));
+		cleanDList();
 	      }
 	  }
       }
   }
   dealDaemon();
+}
+
+void DaemonManager::cleanDList()
+{
+  std::list<Daemon *>::iterator iter;
+  Daemon *tmp;
+
+  for (iter = _dList.begin(); iter != _dList.end(); ++iter) {
+    if ((*iter)->isRunning())
+      {
+      }
+    else
+      {
+	tmp = *iter;
+	_dList.erase(iter++);
+	delete(tmp);
+      }
+  }
+
 }
 
 void DaemonManager::dealDaemon(void)

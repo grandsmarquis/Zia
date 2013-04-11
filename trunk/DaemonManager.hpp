@@ -37,6 +37,7 @@ private:
   int _dPort;
   net::ISocket *_daemon;
 
+  void cleanDList();
   void dealDaemon(void);
 };
 

@@ -20,6 +20,13 @@
 	#include "ThreadWindows.hpp"
 #endif
 
+#ifdef __unix__
+	#include"MutexUnix.hpp"
+#elif defined _WIN32
+	#include"MutexCSWindows.hpp"
+#endif
+
+
 class DaemonManager;
 class ModuleContainerList;
 
@@ -32,6 +39,7 @@ public:
   void stop();
   void call(DirectivesOrder directiveorder, Request &req, Response &resp, t_socket socket, sockaddr_in connexionInfos);
   ~Daemon();
+  void setRunning(bool r);
 
 private:
   net::ISocket		*_socket;
@@ -42,6 +50,7 @@ private:
   DaemonManager		*_man;
   std::queue<Request *>	_reqs;
   ModuleContainerList	*_modules;
+  IMutex                *_mutex;
 
   void ReceiveAll();
 };
