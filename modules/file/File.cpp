@@ -107,9 +107,29 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
   }
   path.append(pathInfo).append(file);
 
-  if (requestHeader.getCommand() == "GET" || requestHeader.getCommand() == "HEAD") {
-
-    std::cout << path.c_str()<< std::endl;
+  if ((requestHeader.getCommand() == "GET" || requestHeader.getCommand() == "HEAD") && boost::filesystem::is_directory(path.c_str())) {
+    std::cout << "DIRECTORY " << std::endl;
+    responseHeader.setStatusCode("200");
+    responseHeader.setStatusMessage("OK");
+    responseHeader.setValue("Content-Type", "text/html");
+    std::string bdy("");
+    typedef std::vector<boost::filesystem::path> vec;
+    vec v;
+    copy(boost::filesystem::directory_iterator(path.c_str()), boost::filesystem::directory_iterator(), std::back_inserter(v));
+    bdy += "<html><head><title>DIRECTORY LISTING</title></head><body>";
+    bdy += "<h1>" + path + "</h1><ul>";
+    sort(v.begin(), v.end());  
+    for (vec::const_iterator it (v.begin()); it != v.end(); ++it)
+      {
+	bdy += "<li>" + (*it).string() + "</li>";
+      }
+    bdy += "</ul></body></html>";
+    length = bdy.size();
+    buff = new char[length];
+    bdy.copy(buff, length);
+    body.setBody(buff, length);
+  }
+  else if (requestHeader.getCommand() == "GET" || requestHeader.getCommand() == "HEAD") {
     std::ifstream resource(path.c_str(), std::ifstream::in);
 
     if (resource.is_open()) {
