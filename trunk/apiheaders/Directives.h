@@ -5,22 +5,20 @@
 #include "Response.h"
 #include "DirectivesOrder.h"
 
-# ifdef _WIN32
-# include	<WinSock2.h>
-typedef SOCKET t_socket;
-# else
-typedef	int		t_socket;
- #include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/ip.h> 
-# endif
+#ifdef _WIN32
+  #include <WinSock2.h>
+  typedef SOCKET t_socket;
+#else
+  #include <netinet/ip.h>
+  typedef int t_socket;
+#endif
 
 class Directives
 {
-public:
-	virtual ~Directives() {};
-	virtual	void	callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos) = 0;
-	virtual	void	init() = 0;
+  public:
+    virtual ~Directives() {};
+    virtual void callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, struct sockaddr_in & connexionInfos) = 0;
+    virtual void init() = 0;
 };
 
 

@@ -84,7 +84,7 @@ std::string File::_getContentType(std::string const & path) {
   return "text/plain";
 }
 
-void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos)
+void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, struct sockaddr_in & connexionInfos)
 {
   RequestHeader & requestHeader = request.getHeader();
   ResponseHeader & responseHeader = response.getHeader();
@@ -120,9 +120,9 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
     bdy += "<h1>" + path + "</h1><ul>";
     sort(v.begin(), v.end());  
     for (vec::const_iterator it (v.begin()); it != v.end(); ++it)
-      {
-	bdy += "<li>" + (*it).string() + "</li>";
-      }
+    {
+      bdy += "<li>" + (*it).string() + "</li>";
+    }
     bdy += "</ul></body></html>";
     length = bdy.size();
     buff = new char[length];
@@ -147,13 +147,13 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
         responseHeader.setStatusCode("200");
         responseHeader.setStatusMessage("OK");
         responseHeader.setValue("Content-Type", this->_getContentType(path));
-	if (requestHeader.getCommand() == "GET")
-	  {
-	    length = boost::filesystem::file_size(path);
-	    buff = new char[length];
-	    resource.read(buff, length);
-	    body.setBody(buff, length);
-	  }
+        if (requestHeader.getCommand() == "GET")
+        {
+          length = boost::filesystem::file_size(path);
+          buff = new char[length];
+          resource.read(buff, length);
+          body.setBody(buff, length);
+        }
       }
       resource.close();
     } else {

@@ -15,6 +15,9 @@ extern "C" {
 
 int main()
 {
+  struct sockaddr_in sockinfo;
+  t_socket sock;
+
   ModuleInfos * moduleInfos = get_module_infos();
   Directives * moduleDirectives = get_directives();
 
@@ -38,7 +41,7 @@ int main()
   request.separate();
 
   moduleDirectives->init();
-  moduleDirectives->callDirective(CREATE_RESPONSE, request, response);
+  moduleDirectives->callDirective(CREATE_RESPONSE, request, response, sock, sockinfo);
 
   response.assemble();
 
