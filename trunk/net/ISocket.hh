@@ -26,6 +26,7 @@ namespace	net
     virtual int		SendAll(char *buffer, size_t len) = 0;
     virtual bool	SetOptions(e_option opt) = 0;
     virtual void        SetRemoteEndPoint(EndPoint const& other) = 0;
+    virtual int		getFD() const = 0;
   };
 }
 

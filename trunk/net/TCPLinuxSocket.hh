@@ -15,6 +15,7 @@ namespace      net
 	LinuxSocket();
 	LinuxSocket(int sock);
 	virtual LinuxSocket* GetSocketForFd(int socket, struct sockaddr const& addr);
+
       };
     }
   }

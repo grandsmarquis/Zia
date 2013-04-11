@@ -15,6 +15,7 @@ public:
 	~RequestHeader ();
 	std::string const &		getArg() const;
 	std::string const &		getCommand() const;
+	std::string const &		getHeaderValue(std::string const & headerAttribut) const;
 	std::string const &		getValueForKey(std::string const & key) const;
 	std::string const &		getVersion() const;
 	bool					hasKey(std::string const & value);

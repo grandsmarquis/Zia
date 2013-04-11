@@ -149,7 +149,7 @@ const char ** PHPModule::buildEnv(RequestHeader & requestHeader) const
   return e;
 }
 
-void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
+void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos)
 {
   pid_t pid;
   int pipe_fds[2];

@@ -17,7 +17,7 @@ class PHPModule : public Directives
   public:
     PHPModule();
     virtual ~PHPModule();
-    virtual void callDirective(DirectivesOrder directiveorder, Request & request, Response & response);
+  virtual void callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos);
     virtual void init();
 };
 

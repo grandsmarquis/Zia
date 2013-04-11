@@ -53,6 +53,11 @@ namespace      net
     /* ??? */
     virtual AUnixSocket*	GetSocketForFd(int fd, struct sockaddr const& addr) = 0;
     virtual int			GetSocketRepresentation();
+    virtual int getFD() const
+    {
+      return (_sock);
+    }
+
   };
 }
 
