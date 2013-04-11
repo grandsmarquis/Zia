@@ -52,7 +52,7 @@ private:
   ModuleContainerList	*_modules;
   IMutex                *_mutex;
 
-  void ReceiveAll();
+  bool ReceiveAll();
 };
 
 #endif

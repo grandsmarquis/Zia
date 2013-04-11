@@ -39,7 +39,7 @@ Daemon::Daemon(DaemonManager *manager, net::ISocket *socket, int port, ModuleCon
   this->_thread->thread_create(this, daemonize);
 }
 
-void Daemon::ReceiveAll()
+bool Daemon::ReceiveAll()
 {
   std::string ss;
   char buffer[254];
@@ -58,8 +58,9 @@ void Daemon::ReceiveAll()
     }
   if (rec <= 0)
     {
-      setRunning(false);
+      return (false);
     }
+  return (true);
 }
 
 void Daemon::work()
@@ -73,7 +74,8 @@ void Daemon::work()
   std::cout << "CONNECTION_INIT" << std::endl;
   while (isRunning())
     {
-      this->ReceiveAll();
+      if (!this->ReceiveAll())
+	break;
       Request *tmp;
       while (!_reqs.empty())
 	{
@@ -89,7 +91,7 @@ void Daemon::work()
 	  if (resp.getLength())
 	    _socket->Send(resp.getBuffer(), resp.getLength());
 	  _reqs.pop();
-	  setRunning(false);
+	  break;
 	}
     }
   std::cout << "CONNECTION_CLOSED" << std::endl;
@@ -99,7 +101,7 @@ void Daemon::work()
     delete(_modules);
   _socket->Close();
   delete(_socket);
-
+  setRunning(false);
 }
 
 void Daemon::setRunning(bool r)

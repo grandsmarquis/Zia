@@ -63,6 +63,9 @@ void Response::assemble()
   out.append(EOL).append(_body.getBody(), _body.getBodyLength());
 
   size_t size = out.size();
+  
+  if (_buffer)
+    delete(_buffer);
   _buffer = new char[size];
   out.copy(_buffer, size);
   _bufferLength = size;
