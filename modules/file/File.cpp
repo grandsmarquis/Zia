@@ -39,16 +39,10 @@ File::File()
 
 File::~File()
 {
-  std::cout << "destruct file" << std::endl;
 }
 
 void File::init()
 {
-  int length;
-  char *buff;
-  std::string path = "../www/index.html";
-
-  std::cout << this->_getContentType(path) << std::endl;
 }
 
 struct mapping {
@@ -68,6 +62,7 @@ struct mapping {
   { "ttf",   "application/x-font-ttf" },
   { "xhtml", "application/xhtml+xml" },
   { "xhtm",  "application/xhtml+xml" },
+  { "ico",   "image/x-icon" },
   { 0, 0 }
 };
 
@@ -86,36 +81,77 @@ std::string File::_getContentType(std::string const & path) {
       }
     }
   }
-
   return "text/plain";
 }
 
 void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response)
 {
-  // RequestHeader requestHeader = request.getHeader();
-  // ResponseHeader responseHeader = response.getHeader();
+  RequestHeader & requestHeader = request.getHeader();
+  ResponseHeader & responseHeader = response.getHeader();
+  char *buff;
+  std::string
+    file,
+    path,
+    pathInfo(boost::filesystem::current_path().native() + "/www"),
+    uri(requestHeader.getArg());
+  size_t
+    length,
+    pos = uri.find_first_of('?');
+  Body & body = response.getBody();
 
-  // std::ifstream resource(path.c_str(), std::ifstream::in);
+  responseHeader.setVersion(request.getHeader().getVersion());
+  if (pos == std::string::npos) {
+    file = uri;
+  } else {
+    file.append(uri.substr(0, pos).c_str(), pos);
+  }
+  path.append(pathInfo).append(file);
 
-  /*
-  if (resource.is_open()) {
-    if (resource.fail()) {
-      std::cerr << "unable to read " << path << std::endl;
+  if (requestHeader.getCommand() == "GET") {
+
+    std::ifstream resource(path.c_str(), std::ifstream::in);
+
+    if (resource.is_open()) {
+      if (resource.fail()) {
+        responseHeader.setStatusCode("404");
+        responseHeader.setStatusMessage("Not Found");
+        responseHeader.setValue("Content-Type", "text/plain");
+        std::string bdy("404 Not Found");
+        length = bdy.size();
+
+        buff = new char[length];
+        bdy.copy(buff, length);
+        body.setBody(buff, length);
+      } else {
+        responseHeader.setStatusCode("200");
+        responseHeader.setStatusMessage("OK");
+        responseHeader.setValue("Content-Type", this->_getContentType(path));
+        length = boost::filesystem::file_size(path);
+        buff = new char[length];
+        resource.read(buff, length);
+        body.setBody(buff, length);
+      }
+      resource.close();
     } else {
-
-      length = boost::filesystem::file_size(path);
-      std::cout << length << " bytes " << std::endl;
+      responseHeader.setStatusCode("404");
+      responseHeader.setStatusMessage("Not Found");
+      responseHeader.setValue("Content-Type", "text/plain");
+      std::string bdy("404 Not Found");
+      length = bdy.size();
 
       buff = new char[length];
-      resource.read(buff, length);
-
-      this->_getEncoding(buff);
-
-      std::cout.write(buff, length);
+      bdy.copy(buff, length);
+      body.setBody(buff, length);
     }
-    resource.close();
   } else {
-    std::cerr << "unable to open " << path << std::endl;
+    responseHeader.setStatusCode("404");
+    responseHeader.setStatusMessage("Not Found");
+    responseHeader.setValue("Content-Type", "text/plain");
+    std::string bdy("404 Not Found");
+    length = bdy.size();
+
+    buff = new char[length];
+    bdy.copy(buff, length);
+    body.setBody(buff, length);
   }
-  */
 }

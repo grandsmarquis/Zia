@@ -1,6 +1,12 @@
 NAME = file
 
 SRC =	File.cpp \
+			../../trunk/apisources/Response.cpp \
+			../../trunk/apisources/ResponseHeader.cpp \
+			../../trunk/apisources/Request.cpp \
+			../../trunk/apisources/RequestHeader.cpp \
+			../../trunk/apisources/Body.cpp \
+			../../trunk/HTTPParser.cpp \
 			main.cpp
 
 OBJ = $(SRC:.cpp=.o)

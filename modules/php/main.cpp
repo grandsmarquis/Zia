@@ -21,7 +21,7 @@ int main()
   // std::cout << moduleInfos->associatedDLL << std::endl;
   // std::cout << moduleInfos->name << std::endl;
   std::string req(
-      "GET /inde.php?toto=tutu&tata=titi HTTP/1.0\n"
+      "GET /index.php?toto=tutu&tata=titi HTTP/1.0\n"
       "Host: example.com\n"
       "Referer: http://example.com/\n"
       "User-Agent: CERN-LineMode/2.15 libwww/2.17b3\n"

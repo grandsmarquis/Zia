@@ -61,10 +61,11 @@ const char ** PHPModule::buildEnv(RequestHeader & requestHeader) const
   std::string
     script,
     query,
-    uri = requestHeader.getArg(),
-    pathInfo = boost::filesystem::current_path().native(),
+    uri(requestHeader.getArg()),
+    pathInfo(boost::filesystem::current_path().native() + "/www"),
     scriptFileName(pathInfo),
-    path = getenv("PATH");
+    home(getenv("HOME")),
+    path(getenv("PATH"));
   size_t
     pos = uri.find_first_of('?'),
     size = uri.size();
@@ -83,11 +84,9 @@ const char ** PHPModule::buildEnv(RequestHeader & requestHeader) const
 
   scriptFileName += script;
 
-  //  env["DOCUMENT_ROOT"] = "/mnt/hgfs/william/GitHub/jdourlens/Zia/modules/php";
-  env["DOCUMENT_ROOT"] = "/home/jdourlens/Documents/Zia/modules/php";
+  env["DOCUMENT_ROOT"] = pathInfo;
   env["GATEWAY_INTERFACE"] = "CGI/1.1";
-  //  env["HOME"] = "/home/SYSTEM";
-  env["HOME"] = "/home/jdourlens";
+  env["HOME"] = home;
 
   if (requestHeader.hasKey("Accept"))
     env["HTTP_ACCEPT"] = requestHeader.getValueForKey("Accept");
