@@ -109,6 +109,7 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
 
   if (requestHeader.getCommand() == "GET") {
 
+    std::cout << path.c_str()<< std::endl;
     std::ifstream resource(path.c_str(), std::ifstream::in);
 
     if (resource.is_open()) {
@@ -154,4 +155,5 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
     bdy.copy(buff, length);
     body.setBody(buff, length);
   }
+  response.assemble();
 }

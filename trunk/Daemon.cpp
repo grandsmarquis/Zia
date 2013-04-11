@@ -121,6 +121,7 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp, 
 		{
 		  std::cout << "calling PHP" << std::endl;
 		  (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
+		  break;
 		}
 	    }
 	  else
