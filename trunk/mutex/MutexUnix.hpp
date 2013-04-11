@@ -9,7 +9,7 @@ class	MutexUnix :public IMutex
 {
 public:
   MutexUnix();
-  ~MutexUnix();
+  virtual ~MutexUnix();
   virtual bool	MutexInit();
   virtual bool	MutexDestroy();
   virtual bool	MutexLock();

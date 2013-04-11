@@ -91,6 +91,13 @@ void Daemon::work()
 	  if (resp.getLength())
 	    _socket->Send(resp.getBuffer(), resp.getLength());
 	  _reqs.pop();
+	  delete(tmp);
+	  while (!_reqs.empty())
+	    {
+	      tmp = _reqs.front();
+	      _reqs.pop();
+	      delete(tmp);
+	    }
 	  break;
 	}
     }
@@ -150,5 +157,15 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp, 
 
 Daemon::~Daemon()
 {
+  delete(_thread);
+  delete(_mutex);
+  Request *tmp;
+
+  while (!_reqs.empty())
+    {
+      tmp = _reqs.front();
+      _reqs.pop();
+      delete(tmp);
+    }
 
 }

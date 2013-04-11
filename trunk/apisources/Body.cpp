@@ -8,6 +8,8 @@ Body::Body(char *body, int lenght)
 
 Body::~Body()
 {
+  if (_length)
+    delete[] (_body);
 }
 
 char *Body::getBody()

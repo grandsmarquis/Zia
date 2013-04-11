@@ -10,6 +10,7 @@ public:
   virtual bool	MutexTryLock() = 0;
   virtual bool	MutexUnlock() = 0;
   virtual void	*getMutexPointer() = 0;
+  virtual ~IMutex() {};
 };
 
 #endif

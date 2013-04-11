@@ -163,4 +163,5 @@ void DaemonManager::breakDaemons(void)
 
 DaemonManager::~DaemonManager()
 {
+
 }

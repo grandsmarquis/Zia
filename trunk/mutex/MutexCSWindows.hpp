@@ -8,7 +8,7 @@ class	MutexCSWindows :public IMutex
 {
 public:
   MutexCSWindows();
-  ~MutexCSWindows();
+  virtual ~MutexCSWindows();
   virtual bool	MutexInit();
   virtual bool	MutexDestroy();
   virtual bool	MutexLock();

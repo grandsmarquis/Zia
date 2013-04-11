@@ -10,12 +10,14 @@
 #define EOL "\r\n"
 
 Response::Response(char *buffer, int bufferLength)
-  :_body(buffer, bufferLength)
+  :_buffer(NULL), _bufferLength(0), _body(buffer, bufferLength)
 {
 }
 
 Response::~Response()
 {
+  if (_bufferLength > 0)
+    delete[] (_buffer);
 }
 
 Body	&Response::getBody()
