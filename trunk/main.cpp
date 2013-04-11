@@ -1,6 +1,10 @@
 
 #include <iostream>
-
+#ifdef __unix__
+#include <unistd.h>
+#elif defined _WIN32
+#include <windows.h>
+#endif
 #include <string>
 
 #include "apiheaders/Response.h"
@@ -14,32 +18,20 @@
 
 int main()
 {
-  // EmbededObjectFactory objectFactory("../modules/");
-  // Response response(NULL, 0);
-  // Request request(NULL, 0);
-
-  // ModuleInfos * moduleInfos = objectFactory.getModuleInfos("file/file");
-  // Directives * moduleDirectives = objectFactory.getModuleDirectives("file/file");
-
-  // std::cout << moduleInfos->associatedDLL << std::endl;
-  // std::cout << moduleInfos->name << std::endl;
-
-
-  // moduleDirectives->init();
-  // moduleDirectives->callDirective(CREATE_RESPONSE, request, response);
-
-  // delete moduleDirectives;
-  // delete moduleInfos;
-
-
-
   DaemonManager manager;
   ConfigManager config("../default.cfg");
-
+  
   
   manager.loadConf(config);
   while (true)
-    manager.update();
+    {
+#ifdef __unix__
+      usleep(1000);
+#elif defined _WIN32
+      Sleep(30);
+#endif
+      manager.update();
+    }
 
   return 0;
 }

@@ -13,8 +13,14 @@
 
 #include "File.hpp"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef _WIN32
+  __declspec(dllexport)
+#endif
+
   ModuleInfos * get_module_infos()
   {
     ModuleInfos *m = new ModuleInfos;
@@ -31,7 +37,10 @@ extern "C"
   {
     return (new File());
   }
+
+#ifdef __cplusplus
 }
+#endif
 
 File::File()
 {

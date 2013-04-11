@@ -10,7 +10,11 @@ DllObjectFactory::DllObjectFactory() {
 }
 
 DllObjectFactory::~DllObjectFactory() {
-
+  std::map<std::string, void *>::iterator it = this->_map.begin();
+  while (it != this->_map.end()) {
+    FreeLibrary(it->second);
+    ++it;
+  }
 }
 
 void *DllObjectFactory::getObjectFromLibrary(std::string const & library) {

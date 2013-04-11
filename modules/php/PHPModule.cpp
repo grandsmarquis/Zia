@@ -23,14 +23,20 @@
 
 #define EOL "\r\n"
 
-extern "C"
-{
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef _WIN32
+  __declspec(dllexport)
+#endif
+
   ModuleInfos * get_module_infos()
   {
     ModuleInfos *m = new ModuleInfos;
 
     m->associatedDLL = "php";
-    m->managedDirectives = CREATE_RESPONSE; // CONNECTION_INIT | PREPROCESS_REQUEST | PROCESS_FINISHED_RESPONSE;
+    m->managedDirectives = CREATE_RESPONSE;
     m->managesHeaderOnly = true;
     m->name = "php";
     m->nbDirectives = 1;
@@ -41,7 +47,11 @@ extern "C"
   {
     return (new PHPModule());
   }
+
+#ifdef __cplusplus
 }
+#endif
+
 
 PHPModule::PHPModule()
 {
