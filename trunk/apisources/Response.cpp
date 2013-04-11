@@ -58,7 +58,7 @@ void Response::assemble()
     out.append(it->first).append(": ").append(it->second).append(EOL);
   }
   char str[10];
-  snprintf(str, 10, "%d", _body.getBodyLength() - 1);
+  snprintf(str, 10, "%d", _body.getBodyLength());
   out.append("Content-Length").append(": ").append(str).append(EOL);
   out.append(EOL).append(_body.getBody(), _body.getBodyLength());
 

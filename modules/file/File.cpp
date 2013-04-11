@@ -107,7 +107,7 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
   }
   path.append(pathInfo).append(file);
 
-  if (requestHeader.getCommand() == "GET") {
+  if (requestHeader.getCommand() == "GET" || requestHeader.getCommand() == "HEAD") {
 
     std::cout << path.c_str()<< std::endl;
     std::ifstream resource(path.c_str(), std::ifstream::in);
@@ -127,10 +127,13 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
         responseHeader.setStatusCode("200");
         responseHeader.setStatusMessage("OK");
         responseHeader.setValue("Content-Type", this->_getContentType(path));
-        length = boost::filesystem::file_size(path);
-        buff = new char[length];
-        resource.read(buff, length);
-        body.setBody(buff, length);
+	if (requestHeader.getCommand() == "GET")
+	  {
+	    length = boost::filesystem::file_size(path);
+	    buff = new char[length];
+	    resource.read(buff, length);
+	    body.setBody(buff, length);
+	  }
       }
       resource.close();
     } else {
