@@ -150,7 +150,10 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp, 
 		}
 	    }
 	  else
+	  {
+		  std::cout << (*iter)->_directives << std::endl;
 	    (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
+	  }
 	}
     }
 }
