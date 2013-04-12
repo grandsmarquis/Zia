@@ -11,14 +11,14 @@ DllObjectFactory::DllObjectFactory() {
 }
 
 DllObjectFactory::~DllObjectFactory() {
-  std::map<std::string, void *>::iterator it = this->_map.begin();
+  std::map<std::string, HMODULE>::iterator it = this->_map.begin();
   while (it != this->_map.end()) {
     FreeLibrary(it->second);
     ++it;
   }
 }
 
-void *DllObjectFactory::getObjectFromLibrary(std::string const & library) {
+HMODULE DllObjectFactory::getObjectFromLibrary(std::string const & library) {
   HMODULE lib;
 
   if (!(lib = this->_map[library])) {
@@ -33,12 +33,12 @@ void *DllObjectFactory::getObjectFromLibrary(std::string const & library) {
 }
 
 ModuleInfos *DllObjectFactory::getModuleInfos(std::string const & library) {
-  void *lib;
+  HMODULE lib;
   
   lib = getObjectFromLibrary(library);
   if (lib)
     {
-      DllObjectFactory::module_infos_bridge_func create_object = (DllObjectFactory::bridge_func) GetProcAddress(lib, "get_module_infos");
+      DllObjectFactory::module_infos_bridge_func create_object = (DllObjectFactory::module_infos_bridge_func) GetProcAddress(lib, "get_module_infos");
       if (create_object)
 	return (create_object());
       else
@@ -49,12 +49,12 @@ ModuleInfos *DllObjectFactory::getModuleInfos(std::string const & library) {
 }
 
 Directives *DllObjectFactory::getModuleDirectives(std::string const & library) {
-  void *lib;
+  HMODULE lib;
   
   lib = getObjectFromLibrary(library);
   if (lib)
     {
-      DllObjectFactory::directives_func create_object = (DllObjectFactory::bridge_func) GetProcAddress(lib, "get_directives");
+      DllObjectFactory::directives_bridge_func create_object = (DllObjectFactory::directives_bridge_func) GetProcAddress(lib, "get_directives");
       if (create_object)
 	return (create_object());
       else

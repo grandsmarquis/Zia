@@ -4,6 +4,9 @@
 #ifndef	__AWINDOWS_SOCKET_HH__
 #define	__AWINDOWS_SOCKET_HH__
 
+#include <winsock2.h>
+#include <ws2tcpip.h>
+
 namespace      net
 {
 	class	AWindowsSocket : public ISocket
@@ -36,7 +39,10 @@ namespace      net
 		virtual int		SendAll(char *buffer, size_t len);
 		SOCKET			GetSocketRepresentation();
 		virtual bool			SetOptions(e_option opt);
-
+		virtual int getFD() const
+		{
+			return (_sock);
+		}
 		/* ??? */
 		virtual AWindowsSocket*	GetSocketForFd(int fd, struct sockaddr const& addr) = 0;
 	};

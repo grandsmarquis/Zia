@@ -4,7 +4,11 @@
 #include "ResponseHeader.h"
 #include "Body.h"
 
-class Response
+class
+	#ifdef _WIN32
+  __declspec(dllexport)
+#endif
+  Response
 {
 	char	*_buffer;
 	int		_bufferLength;

@@ -4,7 +4,11 @@
 # include <map>
 # include <string>
 
-class ResponseHeader
+class
+	#ifdef _WIN32
+  __declspec(dllexport)
+#endif
+  ResponseHeader
 {
 	std::map<std::string, std::string>	_options;
 	std::string							_statusCode;

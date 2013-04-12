@@ -138,7 +138,7 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp, 
 
   for (iter = _modules->getList().begin(); iter != _modules->getList().end(); ++iter)
     {
-      if ((*iter)->_infos->managedDirectives & directiveorder)
+      if ((*iter)->isLoaded() && (*iter)->_infos->managedDirectives & directiveorder)
 	{
 	  if ((*iter)->_infos->name == "php")
 	    {

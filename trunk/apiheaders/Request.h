@@ -3,8 +3,11 @@
 
 #include "RequestHeader.h"
 #include "Body.h"
-
-class Request {
+class
+#ifdef _WIN32
+  __declspec(dllexport)
+#endif
+Request {
 	char	*_buffer;
 	int		_bufferLength;
 	RequestHeader	_header;

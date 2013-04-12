@@ -4,7 +4,11 @@
 #include <string>
 #include <map>
 
-class RequestHeader {
+class
+	#ifdef _WIN32
+  __declspec(dllexport)
+#endif
+  RequestHeader {
 	std::string	_arg;
 	std::string	_command;
 	std::map<std::string, std::string>	_options;

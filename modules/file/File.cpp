@@ -101,8 +101,10 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
   std::string
     file,
     path,
-    pathInfo(boost::filesystem::current_path().native() + "/www"),
+	pathInfo,
     uri(requestHeader.getArg());
+  pathInfo  = boost::filesystem::current_path().string();
+  pathInfo.append("/www/");
   size_t
     length,
     pos = uri.find_first_of('?');

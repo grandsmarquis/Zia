@@ -7,7 +7,7 @@ ModuleContainer::ModuleContainer(EmbededObjectFactory &objectFactory, std::strin
   if (!_infos && !_directives)
     {
       _loaded = false;
-      std::cerr << "Unable to load module from: " << name << "." << std::endl;
+      std::cerr << "Unable to load dat ass from : " << name << "." << std::endl;
     }
   else
     {

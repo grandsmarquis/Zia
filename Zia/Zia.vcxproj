@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5AFCEFC2-26B5-4D5F-BF31-66A2FEC0FC22}</ProjectGuid>
+    <RootNamespace>Zia</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\jdourlens\Downloads\libconfig-1.4.9\lib;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\thread;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\net;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\mutex;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\apiheaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\jdourlens\Downloads\libconfig-1.4.9\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\Zia;C:\Users\jdourlens\Downloads\libconfig-1.4.9\lib;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\thread;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\net;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\mutex;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk;C:\Users\jdourlens\Documents\Visual Studio 2010\Projects\Zia\trunk\apiheaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\jdourlens\Downloads\libconfig-1.4.9\lib\libconfig++.Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\trunk\apiheaders\Body.h" />
+    <ClInclude Include="..\trunk\apiheaders\Directives.h" />
+    <ClInclude Include="..\trunk\apiheaders\DirectivesOrder.h" />
+    <ClInclude Include="..\trunk\apiheaders\Module.h" />
+    <ClInclude Include="..\trunk\apiheaders\ModuleInfos.h" />
+    <ClInclude Include="..\trunk\apiheaders\Request.h" />
+    <ClInclude Include="..\trunk\apiheaders\RequestHeader.h" />
+    <ClInclude Include="..\trunk\apiheaders\Response.h" />
+    <ClInclude Include="..\trunk\apiheaders\ResponseHeader.h" />
+    <ClInclude Include="..\trunk\Bucket.hpp" />
+    <ClInclude Include="..\trunk\ConfigManager.hpp" />
+    <ClInclude Include="..\trunk\Daemon.hpp" />
+    <ClInclude Include="..\trunk\DaemonManager.hpp" />
+    <ClInclude Include="..\trunk\DllObjectFactory.hpp" />
+    <ClInclude Include="..\trunk\EmbededObjectFactory.hpp" />
+    <ClInclude Include="..\trunk\HTTPParser.hpp" />
+    <ClInclude Include="..\trunk\IEmbededObjectFactory.hpp" />
+    <ClInclude Include="..\trunk\Listener.hpp" />
+    <ClInclude Include="..\trunk\ModuleContainer.hpp" />
+    <ClInclude Include="..\trunk\ModuleContainerList.hpp" />
+    <ClInclude Include="..\trunk\mutex\IMutex.hpp" />
+    <ClInclude Include="..\trunk\mutex\MutexCross.hpp" />
+    <ClInclude Include="..\trunk\mutex\MutexCSWindows.hpp" />
+    <ClInclude Include="..\trunk\net\ISelector.hpp" />
+    <ClInclude Include="..\trunk\thread\IThread.hpp" />
+    <ClInclude Include="..\trunk\thread\ThreadWindows.hpp" />
+    <ClInclude Include="..\trunk\thread\TLSWindows.hpp" />
+    <ClInclude Include="export.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\trunk\net\AWindowsSocket.hh" />
+    <None Include="..\trunk\net\EndPoint.hh" />
+    <None Include="..\trunk\net\ip.hh" />
+    <None Include="..\trunk\net\ISocket.hh" />
+    <None Include="..\trunk\net\TCPWindowsSocket.hh" />
+    <None Include="..\trunk\net\WindowsThreadSafeSocket.hh" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\trunk\apisources\Body.cpp" />
+    <ClCompile Include="..\trunk\apisources\Request.cpp" />
+    <ClCompile Include="..\trunk\apisources\RequestHeader.cpp" />
+    <ClCompile Include="..\trunk\apisources\Response.cpp" />
+    <ClCompile Include="..\trunk\apisources\ResponseHeader.cpp" />
+    <ClCompile Include="..\trunk\Bucket.cpp" />
+    <ClCompile Include="..\trunk\ConfigManager.cpp" />
+    <ClCompile Include="..\trunk\Daemon.cpp" />
+    <ClCompile Include="..\trunk\DaemonManager.cpp" />
+    <ClCompile Include="..\trunk\DllObjectFactory.cpp" />
+    <ClCompile Include="..\trunk\HTTPParser.cpp" />
+    <ClCompile Include="..\trunk\Listener.cpp" />
+    <ClCompile Include="..\trunk\main.cpp" />
+    <ClCompile Include="..\trunk\ModuleContainer.cpp" />
+    <ClCompile Include="..\trunk\ModuleContainerList.cpp" />
+    <ClCompile Include="..\trunk\mutex\MutexCross.cpp" />
+    <ClCompile Include="..\trunk\mutex\MutexCSWindows.cpp" />
+    <ClCompile Include="..\trunk\net\AWindowsSocket.cpp" />
+    <ClCompile Include="..\trunk\net\EndPoint.cpp" />
+    <ClCompile Include="..\trunk\net\ip.cpp" />
+    <ClCompile Include="..\trunk\net\net.cpp" />
+    <ClCompile Include="..\trunk\net\TCPWindowsSocket.cpp" />
+    <ClCompile Include="..\trunk\net\WindowsThreadSafeSocket.cpp" />
+    <ClCompile Include="..\trunk\thread\ThreadWindows.cpp" />
+    <ClCompile Include="..\trunk\thread\TLSWindows.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Downloads\libconfig-1.4.9\lib\libconfig++.vcxproj">
+      <Project>{a0c36ce7-d908-4573-8b69-249eeeb7d2be}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
