@@ -8,7 +8,9 @@
 #endif
 #include <string>
 
+#ifdef _WIN32
 #include "export.h"
+#endif
 
 #include "apiheaders/Response.h"
 #include "apiheaders/ModuleInfos.h"
@@ -19,10 +21,19 @@
 #include "DaemonManager.hpp"
 #include "ConfigManager.hpp"
 
+#ifdef __unix__
+int main()
+#elif defined _WIN32
 void zia_main()
+#endif
 {
   DaemonManager manager;
-  ConfigManager config("../default.cfg");
+#ifdef __unix__
+  ConfigManager config("../Linux.cfg");
+#elif defined _WIN32
+  ConfigManager config("../Windows.cfg");
+#endif
+
   
 #ifdef	_WIN32
   WSADATA wsaData;
@@ -45,5 +56,7 @@ void zia_main()
   WSACleanup();
 #endif
 
-  //return 0;
+#ifdef __unix__
+  return 0;
+#endif
 }

@@ -109,9 +109,8 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
 
 	#ifdef _WIN32
 	pathInfo  = "C:\\Users\\jdourlens\\Documents\\Visual Studio 2010\\Projects\\Zia\\Release\\";
-#elif
-	    pathInfo  = boost::filesystem::current_path().string();
-    std::cout << "HELLO"<< std::endl;
+#elif __unix__
+	pathInfo  = boost::filesystem::current_path().string();
   pathInfo.append("/www/");
 #endif
 
