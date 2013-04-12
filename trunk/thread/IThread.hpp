@@ -2,6 +2,7 @@
 #define		__ITHREAD__
 
 #ifdef	_WIN32
+#define _WINSOCKAPI_
 #include	<windows.h>
 #endif
 

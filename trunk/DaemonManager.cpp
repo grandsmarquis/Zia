@@ -108,7 +108,7 @@ void DaemonManager::dealDaemon(void)
       rec = _daemon->Recieve(buffer, 253);
       if (rec > 0)
 	{
-	  buffer[rec] = NULL;
+	  buffer[rec] = '\0';
 	  std::cout << "Will load new conf : " << buffer << "." << std::endl;
  	  ConfigManager config(buffer);
 	  loadConf(config);

@@ -1,4 +1,5 @@
 
+#define _WINSOCKAPI_
 #include <windows.h>
 #include <iostream>
 #include <string>
@@ -28,6 +29,37 @@ void *DllObjectFactory::getObjectFromLibrary(std::string const & library) {
     }
     this->_map[library] = lib;
   }
-  DllObjectFactory::bridge_func create_object = (DllObjectFactory::bridge_func) GetProcAddress(lib, "create_object");
-  return create_object();
+  return (lib);
+}
+
+ModuleInfos *DllObjectFactory::getModuleInfos(std::string const & library) {
+  void *lib;
+  
+  lib = getObjectFromLibrary(library);
+  if (lib)
+    {
+      DllObjectFactory::module_infos_bridge_func create_object = (DllObjectFactory::bridge_func) GetProcAddress(lib, "get_module_infos");
+      if (create_object)
+	return (create_object());
+      else
+	return (NULL);
+    }
+  else
+    return (NULL);
+}
+
+Directives *DllObjectFactory::getModuleDirectives(std::string const & library) {
+  void *lib;
+  
+  lib = getObjectFromLibrary(library);
+  if (lib)
+    {
+      DllObjectFactory::directives_func create_object = (DllObjectFactory::bridge_func) GetProcAddress(lib, "get_directives");
+      if (create_object)
+	return (create_object());
+      else
+	return (NULL);
+    }
+  else
+    return (NULL);
 }

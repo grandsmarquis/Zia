@@ -11,6 +11,7 @@
 
 #elif defined _WIN32
 
+#define _WINSOCKAPI_
 #include <windows.h>
 
 #include "DllObjectFactory.hpp"
