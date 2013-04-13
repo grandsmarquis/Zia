@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "file", "file\file.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zia_launcher", "zia_launcher\zia_launcher.vcxproj", "{810412E2-8876-4AF5-9D7A-B15A7FC3C798}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "php", "php\php.vcxproj", "{10D75C33-2671-4B12-8E1B-9E60C93E9A62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -31,6 +33,10 @@ Global
 		{810412E2-8876-4AF5-9D7A-B15A7FC3C798}.Debug|Win32.Build.0 = Debug|Win32
 		{810412E2-8876-4AF5-9D7A-B15A7FC3C798}.Release|Win32.ActiveCfg = Release|Win32
 		{810412E2-8876-4AF5-9D7A-B15A7FC3C798}.Release|Win32.Build.0 = Release|Win32
+		{10D75C33-2671-4B12-8E1B-9E60C93E9A62}.Debug|Win32.ActiveCfg = Debug|Win32
+		{10D75C33-2671-4B12-8E1B-9E60C93E9A62}.Debug|Win32.Build.0 = Debug|Win32
+		{10D75C33-2671-4B12-8E1B-9E60C93E9A62}.Release|Win32.ActiveCfg = Release|Win32
+		{10D75C33-2671-4B12-8E1B-9E60C93E9A62}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
