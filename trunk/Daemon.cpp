@@ -81,6 +81,7 @@ void Daemon::work()
 	{
 	  tmp = _reqs.front();
 	  Response resp(NULL, 0);
+	  std::cout << "CONNECT " << std::endl;
 	  call(PREPROCESS_REQUEST, *(tmp), resp, sockint, sock);
     std::cout << "proproc" << std::endl;
 	  tmp->separate();

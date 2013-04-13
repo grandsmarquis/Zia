@@ -1,8 +1,11 @@
 
 #include <stdlib.h>
+#ifdef __unix__
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
+#endif
+#include <sys/types.h>
+
 
 #include <fstream>
 #include <iostream>
