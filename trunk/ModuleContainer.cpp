@@ -12,6 +12,7 @@ ModuleContainer::ModuleContainer(EmbededObjectFactory &objectFactory, std::strin
   else
     {
       _loaded = true;
+      // _directives->init();
     }
 }
 

@@ -17,10 +17,10 @@ class SSLModule : public Directives
   public:
     SSLModule();
     virtual ~SSLModule();
-  virtual void callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos);
+    virtual void callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, struct sockaddr_in & connexionInfos);
+    // virtual void callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, sockaddr_in connexionInfos);
     virtual void init();
     std::string get_password() const;
-    
 };
 
 

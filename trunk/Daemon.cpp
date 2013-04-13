@@ -71,7 +71,6 @@ void Daemon::work()
   t_socket sockint = _socket->getFD();
 
   call(CONNECTION_INIT, trash, trash2, sockint, sock);
-  std::cout << "CONNECTION_INIT" << std::endl;
   while (isRunning())
     {
       if (!this->ReceiveAll())
@@ -80,10 +79,11 @@ void Daemon::work()
       while (!_reqs.empty())
 	{
 	  tmp = _reqs.front();
-	  tmp->separate();
 	  Response resp(NULL, 0);
-	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << " :: " <<  tmp->getHeader().getArg() << " :: on socket -> " << sockint << std::endl;
 	  call(PREPROCESS_REQUEST, *(tmp), resp, sockint, sock);
+    std::cout << "proproc" << std::endl;
+	  tmp->separate();
+	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << " :: " <<  tmp->getHeader().getArg() << " :: on socket -> " << sockint << std::endl;
 	  call(PROCESS_REQUEST, *(tmp), resp, sockint, sock);
 	  call(CREATE_RESPONSE, *(tmp), resp, sockint, sock);
 	  call(PROCESS_FINISHED_RESPONSE, *(tmp), resp, sockint, sock);
@@ -137,22 +137,23 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp, 
   std::list<ModuleContainer *>::const_iterator iter;
 
   for (iter = _modules->getList().begin(); iter != _modules->getList().end(); ++iter)
+  {
+    if ((*iter)->_infos->managedDirectives & directiveorder)
     {
-      if ((*iter)->_infos->managedDirectives & directiveorder)
-	{
-	  if ((*iter)->_infos->name == "php")
-	    {
-	      if (std::string::npos != req.getHeader().getArg().find(".php"))
-		{
-		  std::cout << "calling PHP" << std::endl;
-		  (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
-		  break;
-		}
-	    }
-	  else
-	    (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
-	}
+      std::cout << (*iter)->_infos->name << std::endl;
+      if ((*iter)->_infos->name == "php")
+      {
+        if (std::string::npos != req.getHeader().getArg().find(".php"))
+        {
+          std::cout << "calling PHP" << std::endl;
+          (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
+          break;
+        }
+      }
+      else
+        (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
     }
+  }
 }
 
 Daemon::~Daemon()

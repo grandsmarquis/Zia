@@ -21,7 +21,7 @@ class session
 public:
   session(boost::asio::io_service& io_service,
       boost::asio::ssl::context& context)
-    : socket_(io_service, context)
+    : socket_(io_service)
   {
   }
 

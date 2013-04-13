@@ -1,11 +1,17 @@
 NAME = ssl
 
 SRC =	SSLModule.cpp \
-			main.cpp
+			main.cpp \
+			../../trunk/apisources/Response.cpp \
+			../../trunk/apisources/Request.cpp \
+			../../trunk/apisources/RequestHeader.cpp \
+			../../trunk/apisources/ResponseHeader.cpp \
+			../../trunk/HTTPParser.cpp \
+			../../trunk/apisources/Body.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
-CXXFLAGS =
+CXXFLAGS = -W -Wall -I ../../trunk -I ../../trunk/apiheaders
 LDFLAGS = -lboost_system -lboost_filesystem -lpthread -lssl
 
 $(NAME): $(OBJ)
