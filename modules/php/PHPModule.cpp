@@ -133,10 +133,10 @@ const char ** PHPModule::buildEnv(RequestHeader & requestHeader) const
   env["SCRIPT_FILENAME"] = scriptFileName;
   env["SCRIPT_NAME"] = script;
 
-  env["SERVER_ADDR"] = "127.0.0.1";
-  env["SERVER_ADMIN"] = "(server admin's email address)";
-  env["SERVER_NAME"] = "127.0.0.1";
-  env["SERVER_PORT"] = "80";
+  // env["SERVER_ADDR"] = "127.0.0.1";
+  // env["SERVER_ADMIN"] = "(server admin's email address)";
+  // env["SERVER_NAME"] = "127.0.0.1";
+  // env["SERVER_PORT"] = "80";
   env["SERVER_PROTOCOL"] = requestHeader.getVersion();
   env["SERVER_SIGNATURE"] = "";
   env["SERVER_SOFTWARE"] = "a.out server";
@@ -159,100 +159,134 @@ const char ** PHPModule::buildEnv(RequestHeader & requestHeader) const
   return e;
 }
 
+void PHPModule::setError(Request & request, Response & response) const
+{
+  ResponseHeader & responseHeader = response.getHeader();
+  Body & body = response.getBody();
+  size_t length;
+  char *buff;
+
+  responseHeader.setStatusCode("500");
+  responseHeader.setStatusMessage("Internal Server Error");
+  responseHeader.setValue("Content-Type", "text/plain");
+  std::string bdy("500 Internal Server Error");
+  length = bdy.size();
+
+  buff = new char[length];
+  bdy.copy(buff, length);
+  body.setBody(buff, length);
+  responseHeader.setVersion(request.getHeader().getVersion());
+
+  response.assemble();
+}
+
 void PHPModule::callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, struct sockaddr_in & connexionInfos)
 {
   pid_t pid;
   int pipe_fds[2];
+  size_t length;
+  char *buff;
+
+  ResponseHeader & responseHeader = response.getHeader();
+  Body & body = response.getBody();
 
   pipe(pipe_fds);
 
   pid = fork();
   if (pid == -1) {
-    std::cerr << "unable to fork" << std::endl;
+    return setError(request, response);
+    close(pipe_fds[0]);
+    close(pipe_fds[1]);
+  }
+
+  if (pid == 0) {
+    std::string bin("/usr/bin/php-cgi");
+    const char *argv[] = {
+      bin.c_str(),
+      NULL
+    };
+
+    const char **env = this->buildEnv(request.getHeader());
+
+    close(socket);
+    close(pipe_fds[0]);
+    dup2(pipe_fds[1], 1);
+    exit(execve(bin.c_str(), const_cast<char * const*> (argv), const_cast<char * const*> (env)));
   } else {
-    if (pid == 0) {
-      std::string bin("/usr/bin/php-cgi");
-      const char *argv[] = {
-        bin.c_str(),
-        NULL
-      };
 
-      const char **env = this->buildEnv(request.getHeader());
+    int child_rt;
+    close(pipe_fds[1]);
 
+    waitpid(pid, &child_rt, 0);
+    if (child_rt != 0) {
       close(pipe_fds[0]);
-      dup2(pipe_fds[1], 1);
-      execve(bin.c_str(), const_cast<char * const*> (argv), const_cast<char * const*> (env));
-      exit(1);
-    } else {
-      close(pipe_fds[1]);
-
-      waitpid(pid, NULL, 0);
-
-      ResponseHeader & responseHeader = response.getHeader();
-      char buff[128];
-      std::string bdy;
-      int size;
-      size = read(pipe_fds[0], buff, 128);
-      while (size != -1 && size) {
-        bdy.append(buff, size);
-        size = read(pipe_fds[0], buff, 128);
-      }
-      if (size == -1) {
-        std::cout << "unbale to read" << std::endl;
-      }
-
-      std::string header;
-      std::string phpBody;
-
-      size_t pos, last_pos;
-
-      pos = bdy.find(EOL EOL);
-
-      header = bdy.substr(0, pos);
-      if (pos != std::string::npos) {
-        phpBody = bdy.substr(pos + 4);
-
-        Body & body = response.getBody();
-        char *tmp;
-        size = phpBody.size();
-
-        tmp = new char[size];
-        phpBody.copy(tmp, size);
-        body.setBody(tmp, size);
-      }
-
-      last_pos = pos = 0;
-      size_t line_pos;
-
-      do{
-        pos = header.find(EOL, last_pos);
-        std::string line = header.substr(last_pos, pos - last_pos);
-
-        line_pos = line.find(": ");
-        std::string key(line.substr(0, line_pos));
-        std::string value(line.substr(line_pos + 2));
-
-        if (key == "Status") {
-          size_t pos;
-
-          pos = value.find_first_of(' ');
-          responseHeader.setStatusCode(value.substr(0, pos));
-          responseHeader.setStatusMessage(value.substr(pos + 1));
-        } else {
-          responseHeader.setValue(key, value);
-        }
-
-        last_pos = pos + 2;
-      } while (std::string::npos != pos);
-
-      if (responseHeader.getStatusCode().empty()) {
-        responseHeader.setStatusCode("200");
-        responseHeader.setStatusMessage("OK");
-      }
-
-      responseHeader.setVersion(request.getHeader().getVersion());
-
-      response.assemble();
+      return setError(request, response);
     }
+
+    char buff[128];
+    std::string bdy;
+    int size;
+    size = read(pipe_fds[0], buff, 128);
+    while (size != -1 && size) {
+      bdy.append(buff, size);
+      size = read(pipe_fds[0], buff, 128);
+    }
+    if (size == -1) {
+      close(pipe_fds[0]);
+      return setError(request, response);
+    }
+
+    std::string header;
+    std::string phpBody;
+
+    size_t pos, last_pos;
+
+    pos = bdy.find(EOL EOL);
+
+    header = bdy.substr(0, pos);
+    if (pos != std::string::npos) {
+      phpBody = bdy.substr(pos + 4);
+
+      char *tmp;
+      size = phpBody.size();
+
+      tmp = new char[size];
+      phpBody.copy(tmp, size);
+      body.setBody(tmp, size);
+    }
+
+    last_pos = pos = 0;
+    size_t line_pos;
+
+    do{
+      pos = header.find(EOL, last_pos);
+      std::string line = header.substr(last_pos, pos - last_pos);
+
+      line_pos = line.find(": ");
+      std::string key(line.substr(0, line_pos));
+      std::string value(line.substr(line_pos + 2));
+
+      if (key == "Status") {
+        size_t pos;
+
+        pos = value.find_first_of(' ');
+        responseHeader.setStatusCode(value.substr(0, pos));
+        responseHeader.setStatusMessage(value.substr(pos + 1));
+      } else {
+        responseHeader.setValue(key, value);
+      }
+
+      last_pos = pos + 2;
+    } while (std::string::npos != pos);
+
+    if (responseHeader.getStatusCode().empty()) {
+      responseHeader.setStatusCode("200");
+      responseHeader.setStatusMessage("OK");
+    }
+
+    responseHeader.setVersion(request.getHeader().getVersion());
+
+    response.assemble();
+    close(pipe_fds[0]);
   }
 }

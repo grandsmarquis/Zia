@@ -1,4 +1,5 @@
 
+#include <stdlib.h>
 #include "Request.h"
 #include "Daemon.hpp"
 
@@ -85,7 +86,10 @@ void Daemon::work()
 	  tmp->separate();
 	  std::cout << "BEFORE :: " << tmp->getHeader().getCommand() << " :: " <<  tmp->getHeader().getArg() << " :: on socket -> " << sockint << std::endl;
 	  call(PROCESS_REQUEST, *(tmp), resp, sockint, sock);
-	  call(CREATE_RESPONSE, *(tmp), resp, sockint, sock);
+
+    call(CREATE_RESPONSE, *(tmp), resp, sockint, sock);
+
+
 	  call(PROCESS_FINISHED_RESPONSE, *(tmp), resp, sockint, sock);
 	  call(PRESENDING_PROCESSING, *(tmp), resp, sockint, sock);
 	  if (resp.getLength())
