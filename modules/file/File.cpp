@@ -18,7 +18,8 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-  __declspec(dllexport)
+  __declspec(dllexport)   ModuleInfos * get_module_infos();
+     __declspec(dllexport)   Directives * get_directives();
 #endif
 
   ModuleInfos * get_module_infos()
@@ -95,14 +96,27 @@ std::string File::_getContentType(std::string const & path) {
 
 void File::callDirective(DirectivesOrder directiveorder, Request & request, Response & response, t_socket socket, struct sockaddr_in & connexionInfos)
 {
+	
   RequestHeader & requestHeader = request.getHeader();
   ResponseHeader & responseHeader = response.getHeader();
+
   char *buff;
   std::string
     file,
     path,
-    pathInfo(boost::filesystem::current_path().native() + "/www"),
+	pathInfo,
     uri(requestHeader.getArg());
+
+	#ifdef _WIN32
+	pathInfo  = "C:\\Users\\jdourlens\\Documents\\Visual Studio 2010\\Projects\\Zia\\Release\\";
+#elif __unix__
+	pathInfo  = boost::filesystem::current_path().string();
+  pathInfo.append("/www/");
+#endif
+
+
+
+
   size_t
     length,
     pos = uri.find_first_of('?');
@@ -115,7 +129,9 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
     file.append(uri.substr(0, pos).c_str(), pos);
   }
   path.append(pathInfo).append(file);
-
+  std::cout << "HELLO" << std::endl;
+  boost::filesystem::is_directory(path.c_str());
+    std::cout << "HELLO" << std::endl;
   if ((requestHeader.getCommand() == "GET" || requestHeader.getCommand() == "HEAD") && boost::filesystem::is_directory(path.c_str())) {
     std::cout << "DIRECTORY " << std::endl;
     responseHeader.setStatusCode("200");
@@ -188,4 +204,5 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
     body.setBody(buff, length);
   }
   response.assemble();
+  	std::cout << "GOODBYE"<< std::endl;
 }

@@ -140,18 +140,23 @@ void Daemon::call(DirectivesOrder directiveorder, Request &req, Response &resp, 
   {
     if ((*iter)->_infos->managedDirectives & directiveorder)
     {
-      std::cout << (*iter)->_infos->name << std::endl;
-      if ((*iter)->_infos->name == "php")
-      {
-        if (std::string::npos != req.getHeader().getArg().find(".php"))
-        {
-          std::cout << "calling PHP" << std::endl;
-          (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
-          break;
-        }
-      }
-      else
-        (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
+      if ((*iter)->isLoaded() && (*iter)->_infos->managedDirectives & directiveorder)
+	{
+	  if ((*iter)->_infos->name == "php")
+	    {
+	      if (std::string::npos != req.getHeader().getArg().find(".php"))
+		{
+		  std::cout << "calling PHP" << std::endl;
+		  (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
+		  break;
+		}
+	    }
+	  else
+	  {
+		  std::cout << (*iter)->_directives << std::endl;
+	    (*iter)->_directives->callDirective(directiveorder, req, resp, socket, connexionInfos);
+	  }
+	}
     }
   }
 }

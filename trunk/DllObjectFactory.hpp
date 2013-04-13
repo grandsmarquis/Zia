@@ -17,7 +17,7 @@ private:
   typedef Directives *(*directives_bridge_func)();
   
   
-  void *getObjectFromLibrary(std::string const & library);
+  HMODULE getObjectFromLibrary(std::string const & library);
 
   
   

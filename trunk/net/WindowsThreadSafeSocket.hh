@@ -42,6 +42,10 @@ namespace      net
     void	Close();
     void	SetRemoteEndPoint(EndPoint const& other);
     net::AWindowsSocket*	GetSocketForFd(int socket, struct sockaddr const& addr);
+	virtual int getFD() const
+	{
+		return (_innerSocket->getFD());
+	}
   };
 }
 

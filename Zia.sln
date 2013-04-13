@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zia", "Zia\Zia.vcxproj", "{5AFCEFC2-26B5-4D5F-BF31-66A2FEC0FC22}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libconfig++", "..\..\..\..\Downloads\libconfig-1.4.9\lib\libconfig++.vcxproj", "{A0C36CE7-D908-4573-8B69-249EEEB7D2BE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "file", "file\file.vcxproj", "{171AC5E9-15A1-4FB2-8AFA-ABE29B780CAB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zia_launcher", "zia_launcher\zia_launcher.vcxproj", "{810412E2-8876-4AF5-9D7A-B15A7FC3C798}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AFCEFC2-26B5-4D5F-BF31-66A2FEC0FC22}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5AFCEFC2-26B5-4D5F-BF31-66A2FEC0FC22}.Debug|Win32.Build.0 = Debug|Win32
+		{5AFCEFC2-26B5-4D5F-BF31-66A2FEC0FC22}.Release|Win32.ActiveCfg = Release|Win32
+		{5AFCEFC2-26B5-4D5F-BF31-66A2FEC0FC22}.Release|Win32.Build.0 = Release|Win32
+		{A0C36CE7-D908-4573-8B69-249EEEB7D2BE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A0C36CE7-D908-4573-8B69-249EEEB7D2BE}.Debug|Win32.Build.0 = Debug|Win32
+		{A0C36CE7-D908-4573-8B69-249EEEB7D2BE}.Release|Win32.ActiveCfg = Release|Win32
+		{A0C36CE7-D908-4573-8B69-249EEEB7D2BE}.Release|Win32.Build.0 = Release|Win32
+		{171AC5E9-15A1-4FB2-8AFA-ABE29B780CAB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{171AC5E9-15A1-4FB2-8AFA-ABE29B780CAB}.Debug|Win32.Build.0 = Debug|Win32
+		{171AC5E9-15A1-4FB2-8AFA-ABE29B780CAB}.Release|Win32.ActiveCfg = Release|Win32
+		{171AC5E9-15A1-4FB2-8AFA-ABE29B780CAB}.Release|Win32.Build.0 = Release|Win32
+		{810412E2-8876-4AF5-9D7A-B15A7FC3C798}.Debug|Win32.ActiveCfg = Debug|Win32
+		{810412E2-8876-4AF5-9D7A-B15A7FC3C798}.Debug|Win32.Build.0 = Debug|Win32
+		{810412E2-8876-4AF5-9D7A-B15A7FC3C798}.Release|Win32.ActiveCfg = Release|Win32
+		{810412E2-8876-4AF5-9D7A-B15A7FC3C798}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

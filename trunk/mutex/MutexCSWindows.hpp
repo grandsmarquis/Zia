@@ -1,6 +1,6 @@
 #ifndef		__MUTEX_CSWINDOWS__
 #define		__MUTEX_CSWINDOWS__
-
+#define _WINSOCKAPI_
 #include	<Windows.h>
 #include	"IMutex.hpp"
 

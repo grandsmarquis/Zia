@@ -2,7 +2,11 @@
 # define __BODY_H__
 
 
-class Body
+class
+	#ifdef _WIN32
+  __declspec(dllexport)
+#endif
+  Body
 {
 	char		*_body;
 	int			_length;

@@ -60,7 +60,11 @@ void Response::assemble()
     out.append(it->first).append(": ").append(it->second).append(EOL);
   }
   char str[10];
-  snprintf(str, 10, "%d", _body.getBodyLength());
+  #ifdef __unix__
+    snprintf(str, 10, "%d", _body.getBodyLength());
+#elif defined _WIN32
+    _snprintf(str, 10, "%d", _body.getBodyLength());
+#endif
   out.append("Content-Length").append(": ").append(str).append(EOL);
   out.append(EOL).append(_body.getBody(), _body.getBodyLength());
 
