@@ -129,11 +129,8 @@ void File::callDirective(DirectivesOrder directiveorder, Request & request, Resp
     file.append(uri.substr(0, pos).c_str(), pos);
   }
   path.append(pathInfo).append(file);
-  std::cout << "HELLO" << std::endl;
   boost::filesystem::is_directory(path.c_str());
-    std::cout << "HELLO" << std::endl;
   if ((requestHeader.getCommand() == "GET" || requestHeader.getCommand() == "HEAD") && boost::filesystem::is_directory(path.c_str())) {
-    std::cout << "DIRECTORY " << std::endl;
     responseHeader.setStatusCode("200");
     responseHeader.setStatusMessage("OK");
     responseHeader.setValue("Content-Type", "text/html");
